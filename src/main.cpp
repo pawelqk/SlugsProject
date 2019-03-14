@@ -24,8 +24,22 @@ int main()
         return 1;
     }
     start_color();
-    init_pair(1, COLOR_YELLOW, COLOR_RED);
-    rectangle(0,0,20,20);
+    init_pair(1, COLOR_BLACK, COLOR_GREEN);
+    attron(COLOR_PAIR(1));
+    for (int y = 0; y < 3; y++) {
+        mvhline(y, 0, ' ', 7);
+    }
+    move(1,3);
+    printw("o");
+    move(20,20);
+    // move(1,4);
+    // printw("*");
+    // move(2,3);
+    // printw("*");
+    // move(2,4);
+    // printw("*");
+    // rectangle(0,0,20,20);
+    curs_set(0);
     getch();
     endwin();
 }
