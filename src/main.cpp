@@ -1,17 +1,40 @@
-#include "Leaf.h"
+#include "Logger.h"
+#include "SlugColony.h"
 
 #include <curses.h>
+#include <string>
 
-void rectangle(int y1, int x1, int y2, int x2)
+static const uint16_t WIDTH = 100;
+static const uint16_t HEIGHT = 50;
+static const unsigned int HEALTHY_GREEN = 41;
+
+void drawLeaf()
 {
-    mvhline(y1, x1, 0, x2-x1);
-    mvhline(y2, x1, 0, x2-x1);
-    mvvline(y1, x1, 0, y2-y1);
-    mvvline(y1, x2, 0, y2-y1);
-    mvaddch(y1, x1, ACS_ULCORNER);
-    mvaddch(y2, x1, ACS_LLCORNER);
-    mvaddch(y1, x2, ACS_URCORNER);
-    mvaddch(y2, x2, ACS_LRCORNER);
+    attron(COLOR_PAIR(1));
+    for (auto i = 0u; i < HEIGHT; ++i)
+    {
+        mvhline(i, 0, ' ', WIDTH);
+    }
+}
+
+enum Move
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+};
+
+void updatePosition(Slug *slug, Move mov)
+{
+    auto currentPosi = slug->getLeafCoords();
+    move(currentPosi.second, currentPosi.first);
+    printw(" ");
+    if (mov == UP)
+    {
+        move(currentPosi.second + 1, currentPosi.first);
+        printw(" ");
+    }
 }
 
 int main()
@@ -20,25 +43,26 @@ int main()
     if (has_colors() == FALSE)
     {
         endwin();
-        printf("Your terminal does not support color\n");
+        printf("Your terminal does not support colors\n");
         return 1;
     }
+    
     start_color();
-    init_pair(1, COLOR_BLACK, COLOR_GREEN);
-    attron(COLOR_PAIR(1));
-    for (int y = 0; y < 3; y++) {
-        mvhline(y, 0, ' ', 7);
+    init_pair(1, COLOR_BLACK, HEALTHY_GREEN);
+    drawLeaf();
+
+    SlugColony colony{20};
+    std::pair<uint16_t, uint16_t> sizes{WIDTH, HEIGHT};
+    colony.createColony(sizes);
+
+    for (auto&& slug : colony.getColony())
+    {
+        move(slug.getLeafCoords().second, slug.getLeafCoords().first); // TODO: Check why this is inverted
+        printw("x");
     }
-    move(1,3);
-    printw("o");
-    move(20,20);
-    // move(1,4);
-    // printw("*");
-    // move(2,3);
-    // printw("*");
-    // move(2,4);
-    // printw("*");
-    // rectangle(0,0,20,20);
+    
+
+    attroff(COLOR_PAIR(1));
     curs_set(0);
     getch();
     endwin();
