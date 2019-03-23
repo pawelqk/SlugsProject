@@ -12,7 +12,7 @@ class Slug
 public:
     enum Move: uint8_t
     {
-        UP,
+        UP = 1,
         DOWN,
         LEFT,
         RIGHT

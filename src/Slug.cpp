@@ -32,27 +32,27 @@ Coordinates Slug::moveRandomly(Coordinates& limits) // TODO: better!!!
     switch(static_cast<Move>(dist(rng)))
     {
     case UP:
-        if (leafCoords.first > 0)
-        {
-            leafCoords.first--;
-        }
-        break;
-    case DOWN:
-        if (leafCoords.first < limits.first - 1)
-        {
-            leafCoords.first++;
-        }
-        break;
-    case LEFT:
         if (leafCoords.second > 0)
         {
             leafCoords.second--;
         }
         break;
-    case RIGHT:
+    case DOWN:
         if (leafCoords.second < limits.second - 1)
         {
             leafCoords.second++;
+        }
+        break;
+    case LEFT:
+        if (leafCoords.first > 0)
+        {
+            leafCoords.first--;
+        }
+        break;
+    case RIGHT:
+        if (leafCoords.first < limits.first - 1)
+        {
+            leafCoords.first++;
         }
         break;
     }
