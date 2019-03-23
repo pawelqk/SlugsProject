@@ -13,20 +13,21 @@ void Drawer::drawLeaf()
     }
 }
 
-void Drawer::drawColony(SlugColony& colony)
+void Drawer::drawColony(std::vector<Coordinates>& slugPositions)
 {
-    for (auto&& slug : colony.getColony())
+    for (auto&& position : slugPositions)
     {
-        move(slug.getLeafCoords().second, slug.getLeafCoords().first); // TODO: Check why this is inverted
+        move(position.second, position.first); // TODO: Check why this is inverted
         printw("x");
     }
 }
 
-void Drawer::updatePosition(Slug slug, Coordinates oldPosition)
+void Drawer::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
 {
-    auto& currentPosi = slug.getLeafCoords();
-    move(oldPosition.second, oldPosition.first);
+    move(oldCoords.second, oldCoords.first);
     printw(" ");
-    move(currentPosi.second, currentPosi.first);
+    move(newCoords.second, newCoords.first);
     printw("x");
+    curs_set(0);
+    refresh();
 }

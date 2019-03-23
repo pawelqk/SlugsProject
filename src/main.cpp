@@ -10,8 +10,10 @@ static const uint16_t HEIGHT = 40;
 static const unsigned int HEALTHY_GREEN = 41;
 static const uint16_t COLONY_SIZE = 5;
 
+int Slug::a = 1;
 int main()
 {
+    std::vector<std::thread> threads;
     initscr();
     if (has_colors() == FALSE)
     {
@@ -24,24 +26,29 @@ int main()
     init_pair(1, COLOR_BLACK, HEALTHY_GREEN);
 
     SlugColony colony{COLONY_SIZE};
-    std::pair<uint16_t, uint16_t> sizes{WIDTH, HEIGHT};
+    Coordinates sizes{WIDTH, HEIGHT};
     colony.createColony(sizes);
     
-    Drawer drawer{WIDTH, HEIGHT};
-    drawer.drawLeaf();
-    drawer.drawColony(colony);
-
-    curs_set(0);
-    while (true) {
-    getch();
+    std::vector<Coordinates> startingCoords(COLONY_SIZE);
+    for (auto&& slug : colony.getColony())
+    {
+        startingCoords.emplace_back(slug.getLeafCoords());
+    }
+    
+    auto drawer = std::make_shared<Drawer>(WIDTH, HEIGHT);
+    drawer->drawLeaf();
+    drawer->drawColony(startingCoords);
     auto newColony = colony.getColony();
+
     for (auto&& slug : newColony)
     {
-        drawer.updatePosition(slug, slug.moveRandomly(sizes));
+        threads.emplace_back(slug.spawn(drawer));
     }
-
-    colony.setColony(newColony);
+    for (auto&& thread : threads)
+    {
+        thread.join();
     }
+    
 
     attroff(COLOR_PAIR(1));
     getch();
