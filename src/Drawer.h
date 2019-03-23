@@ -1,21 +1,20 @@
 #ifndef __DRAWER_H__
 #define __DRAWER_H__
 
-#include "Slug.h"
-#include "SlugColony.h"
-
 #include <cstdint>
 #include <curses.h>
 #include <utility>
+#include <vector>
 
+using Coordinates = std::pair<uint16_t, uint16_t>;
 
 class Drawer
 {
 public:
     Drawer(uint16_t width, uint16_t height);
     void drawLeaf();
-    void drawColony(SlugColony& colony);
-    void updatePosition(Slug slug, Coordinates oldPosition);
+    void drawColony(std::vector<Coordinates>& slugPositions);
+    void updatePosition(Coordinates& oldCoords, Coordinates& newCoords);
 private:
     uint16_t width;
     uint16_t height;

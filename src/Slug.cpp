@@ -3,12 +3,8 @@
 #include <iostream>
 #include <random>
 
-Slug::Slug()
-{
-    std::cout << "Slug con" << std::endl;
-}
-
-Slug::Slug(Coordinates leafCoords): leafCoords(leafCoords)
+Slug::Slug(Coordinates leafCoords, Coordinates limits):
+leafCoords(leafCoords), limits(limits), dead(false)
 {}
 
 uint8_t Slug::getHealth()
@@ -21,7 +17,7 @@ const Coordinates& Slug::getLeafCoords() const
     return leafCoords;
 }
 
-Coordinates Slug::moveRandomly(Coordinates& limits) // TODO: better!!!
+Coordinates Slug::moveRandomly() // TODO: better!!!
 {
     // TODO: extract
     std::random_device dev;
@@ -58,5 +54,24 @@ Coordinates Slug::moveRandomly(Coordinates& limits) // TODO: better!!!
     }
 
     return oldCoords;
+}
+
+std::thread Slug::spawn(std::shared_ptr<Drawer>& drawer)
+{
+    this->drawer = drawer;
+    return std::thread([=]{ live();});
+}
+
+void Slug::live()
+{
+    while (!dead)
+    {
+        lock.lock();
+        auto oldCoords = moveRandomly();
+        // std::cout << std::this_thread::get_id() << std::endl;
+        drawer->updatePosition(oldCoords, leafCoords);
+        lock.unlock();
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    }
 }
 

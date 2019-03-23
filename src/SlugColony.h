@@ -13,7 +13,7 @@ class SlugColony
 {
 public:
     SlugColony(uint16_t size);
-    void createColony(Coordinates& leafSizs);
+    void createColony(Coordinates& leafSize);
     const std::vector<Slug>& getColony() const;
     void setColony(std::vector<Slug>& newColony);
 
