@@ -15,7 +15,6 @@ static std::mutex lock;
 class Slug
 {
 public:
-    static int a;
     enum Move: uint8_t
     {
         UP = 1,
@@ -29,6 +28,7 @@ public:
     const Coordinates& getLeafCoords() const;
     Coordinates moveRandomly();
     std::thread spawn(std::shared_ptr<Drawer>& drawer);
+    void kill();
 private:
     void live();
 

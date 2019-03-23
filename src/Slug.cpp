@@ -62,6 +62,11 @@ std::thread Slug::spawn(std::shared_ptr<Drawer>& drawer)
     return std::thread([=]{ live();});
 }
 
+void Slug::kill()
+{
+    dead = true;
+}
+
 void Slug::live()
 {
     while (!dead)

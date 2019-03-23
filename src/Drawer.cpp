@@ -15,7 +15,7 @@ void Drawer::drawLeaf()
 
 void Drawer::drawColony(std::vector<Coordinates>& slugPositions)
 {
-    for (auto&& position : slugPositions)
+    for (auto& position : slugPositions)
     {
         move(position.second, position.first); // TODO: Check why this is inverted
         printw("x");
