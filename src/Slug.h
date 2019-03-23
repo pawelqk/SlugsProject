@@ -22,7 +22,7 @@ public:
     Slug(Coordinates leafCoords);
     uint8_t getHealth();
     const Coordinates& getLeafCoords() const;
-    Coordinates& moveRandomly(Coordinates& limits);
+    Coordinates moveRandomly(Coordinates& limits);
 
 private:
     uint8_t health;

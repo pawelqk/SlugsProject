@@ -21,13 +21,14 @@ const Coordinates& Slug::getLeafCoords() const
     return leafCoords;
 }
 
-Coordinates& Slug::moveRandomly(Coordinates& limits) // TODO: better!!!
+Coordinates Slug::moveRandomly(Coordinates& limits) // TODO: better!!!
 {
     // TODO: extract
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist(1, 4);
-
+    auto oldCoords = leafCoords;
+    // TODO: they're not going left. Debugging move with (x,y) is required
     switch(static_cast<Move>(dist(rng)))
     {
     case UP:
@@ -56,6 +57,6 @@ Coordinates& Slug::moveRandomly(Coordinates& limits) // TODO: better!!!
         break;
     }
 
-    return leafCoords;
+    return oldCoords;
 }
 

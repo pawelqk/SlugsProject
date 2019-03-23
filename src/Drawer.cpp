@@ -22,11 +22,11 @@ void Drawer::drawColony(SlugColony& colony)
     }
 }
 
-void Drawer::updatePosition(Slug slug, Coordinates& newPosition)
+void Drawer::updatePosition(Slug slug, Coordinates oldPosition)
 {
     auto& currentPosi = slug.getLeafCoords();
-    move(currentPosi.second, currentPosi.first);
+    move(oldPosition.second, oldPosition.first);
     printw(" ");
-    move(newPosition.second, newPosition.first);
+    move(currentPosi.second, currentPosi.first);
     printw("x");
 }

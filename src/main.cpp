@@ -31,16 +31,19 @@ int main()
     drawer.drawLeaf();
     drawer.drawColony(colony);
 
+    curs_set(0);
+    while (true) {
+    getch();
     auto newColony = colony.getColony();
     for (auto&& slug : newColony)
     {
         drawer.updatePosition(slug, slug.moveRandomly(sizes));
     }
+
     colony.setColony(newColony);
-    
+    }
 
     attroff(COLOR_PAIR(1));
-    curs_set(0);
     getch();
     endwin();
 }

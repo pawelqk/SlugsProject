@@ -15,7 +15,7 @@ public:
     Drawer(uint16_t width, uint16_t height);
     void drawLeaf();
     void drawColony(SlugColony& colony);
-    void updatePosition(Slug slug, Coordinates& newPosition);
+    void updatePosition(Slug slug, Coordinates oldPosition);
 private:
     uint16_t width;
     uint16_t height;
