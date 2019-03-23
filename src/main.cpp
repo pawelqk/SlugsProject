@@ -8,7 +8,7 @@
 static const uint16_t WIDTH = 100;
 static const uint16_t HEIGHT = 40;
 static const unsigned int HEALTHY_GREEN = 41;
-static const uint16_t COLONY_SIZE = 5;
+static const uint16_t COLONY_SIZE = 40;
 
 int Slug::a = 1;
 int main()
@@ -29,12 +29,12 @@ int main()
     Coordinates sizes{WIDTH, HEIGHT};
     colony.createColony(sizes);
     
-    std::vector<Coordinates> startingCoords(COLONY_SIZE);
+    std::vector<Coordinates> startingCoords;
+    startingCoords.reserve(COLONY_SIZE);
     for (auto&& slug : colony.getColony())
     {
         startingCoords.emplace_back(slug.getLeafCoords());
     }
-    
     auto drawer = std::make_shared<Drawer>(WIDTH, HEIGHT);
     drawer->drawLeaf();
     drawer->drawColony(startingCoords);
@@ -44,6 +44,7 @@ int main()
     {
         threads.emplace_back(slug.spawn(drawer));
     }
+
     for (auto&& thread : threads)
     {
         thread.join();
