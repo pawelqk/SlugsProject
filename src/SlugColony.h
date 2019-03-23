@@ -1,21 +1,22 @@
 #ifndef __SLUG_COLONY_H__
 #define __SLUG_COLONY_H__
 
-#include "Leaf.h"
-#include "Slug.h"
+#include "Drawer.h"
 
 #include <cstdint>
 #include <vector>
 
+class Slug;
+
 class SlugColony
 {
 public:
-    SlugColony(uint8_t size);
-    void createColony(std::pair<uint16_t, uint16_t>& leafSizs);
+    SlugColony(uint16_t size);
+    void createColony(Coordinates& leafSizs);
     const std::vector<Slug>& getColony() const;
 
 private:
-    uint8_t size;
+    uint16_t size;
     std::vector<Slug> colony;
 };
 

@@ -1,18 +1,33 @@
-#include "Leaf.h"
+#ifndef __SLUG_H__
+#define __SLUG_H__
+
+#include "Drawer.h"
 
 #include <cstdint>
 #include <memory>
 
+class Drawer;
+
 class Slug
 {
 public:
+    enum Move: uint8_t
+    {
+        UP,
+        DOWN,
+        LEFT,
+        RIGHT
+    };
+
     Slug();
-    Slug(std::pair<uint16_t, uint16_t> leafCoords);
+    Slug(Coordinates leafCoords);
     uint8_t getHealth();
-    const std::pair<uint16_t, uint16_t>& getLeafCoords() const;
+    const Coordinates& getLeafCoords() const;
+    void moveRandomly(Drawer& drawer);
 
 private:
     uint8_t health;
-    std::pair<uint16_t, uint16_t> leafCoords;
+    Coordinates leafCoords;
 };
 
+#endif

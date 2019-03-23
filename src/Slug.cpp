@@ -1,13 +1,14 @@
 #include "Slug.h"
 
 #include <iostream>
+#include <random>
 
 Slug::Slug()
 {
     std::cout << "Slug con" << std::endl;
 }
 
-Slug::Slug(std::pair<uint16_t, uint16_t> leafCoords): leafCoords(leafCoords)
+Slug::Slug(Coordinates leafCoords): leafCoords(leafCoords)
 {}
 
 uint8_t Slug::getHealth()
@@ -15,10 +16,17 @@ uint8_t Slug::getHealth()
     return health;
 }
 
-const std::pair<uint16_t, uint16_t>& Slug::getLeafCoords() const
+const Coordinates& Slug::getLeafCoords() const
 {
     return leafCoords;
 }
 
+void Slug::moveRandomly(Drawer& drawer) // TODO: better!!!
+{
+    // TODO: extract
+    std::random_device dev;
+    std::mt19937 rng(dev());
+    std::uniform_int_distribution<std::mt19937::result_type> dist(1, 4);
 
+}
 
