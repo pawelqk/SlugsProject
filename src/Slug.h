@@ -1,12 +1,11 @@
 #ifndef __SLUG_H__
 #define __SLUG_H__
 
-#include "Drawer.h"
-
 #include <cstdint>
 #include <memory>
 
-class Drawer;
+
+using Coordinates = std::pair<uint16_t, uint16_t>;
 
 class Slug
 {
@@ -23,7 +22,7 @@ public:
     Slug(Coordinates leafCoords);
     uint8_t getHealth();
     const Coordinates& getLeafCoords() const;
-    void moveRandomly(Drawer& drawer);
+    Coordinates& moveRandomly(Coordinates& limits);
 
 private:
     uint8_t health;

@@ -21,12 +21,41 @@ const Coordinates& Slug::getLeafCoords() const
     return leafCoords;
 }
 
-void Slug::moveRandomly(Drawer& drawer) // TODO: better!!!
+Coordinates& Slug::moveRandomly(Coordinates& limits) // TODO: better!!!
 {
     // TODO: extract
     std::random_device dev;
     std::mt19937 rng(dev());
     std::uniform_int_distribution<std::mt19937::result_type> dist(1, 4);
 
+    switch(static_cast<Move>(dist(rng)))
+    {
+    case UP:
+        if (leafCoords.first > 0)
+        {
+            leafCoords.first--;
+        }
+        break;
+    case DOWN:
+        if (leafCoords.first < limits.first - 1)
+        {
+            leafCoords.first++;
+        }
+        break;
+    case LEFT:
+        if (leafCoords.second > 0)
+        {
+            leafCoords.second--;
+        }
+        break;
+    case RIGHT:
+        if (leafCoords.second < limits.second - 1)
+        {
+            leafCoords.second++;
+        }
+        break;
+    }
+
+    return leafCoords;
 }
 

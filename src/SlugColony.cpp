@@ -38,3 +38,8 @@ const std::vector<Slug>& SlugColony::getColony() const
     return colony;
 }
 
+void SlugColony::setColony(std::vector<Slug>& newColony)
+{
+    colony = newColony;
+}
+
