@@ -17,6 +17,11 @@ const Coordinates& Slug::getLeafCoords() const
     return leafCoords;
 }
 
+void Slug::setLeaf(std::shared_ptr<Leaf>& leaf)
+{
+    currentLeaf = leaf;
+}
+
 Coordinates Slug::moveRandomly() // TODO: better!!!
 {
     // TODO: extract random
@@ -49,11 +54,19 @@ void Slug::live()
 {
     while (!dead)
     {
-        lock.lock();
-        auto oldCoords = moveRandomly();
-        drawer->updatePosition(oldCoords, leafCoords);
-        lock.unlock();
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        if (currentLeaf->getSize() != 0)
+        {
+            currentLeaf->eat();
+            drawer->updateLeaf(leafCoords, currentLeaf->getSize());
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+        }
+        else
+        {
+            lock.lock();
+            auto oldCoords = moveRandomly();
+            drawer->updatePosition(oldCoords, leafCoords);
+            lock.unlock();
+        }
     }
 }
 

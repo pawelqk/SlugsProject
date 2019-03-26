@@ -31,3 +31,9 @@ void Drawer::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
     curs_set(0);
     refresh();
 }
+
+void Drawer::updateLeaf(Coordinates& leafPosition, uint8_t leafSize)
+{
+    move(leafPosition.second, leafPosition.first);
+
+}

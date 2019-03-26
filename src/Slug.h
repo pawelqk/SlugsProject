@@ -2,6 +2,7 @@
 #define __SLUG_H__
 
 #include "Drawer.h"
+#include "Leaf.h"
 
 #include <cstdint>
 #include <memory>
@@ -26,6 +27,9 @@ public:
     Slug(Coordinates leafCoords, Coordinates limits);
     uint8_t getHealth();
     const Coordinates& getLeafCoords() const;
+
+    void setLeaf(std::shared_ptr<Leaf>& leaf);
+
     Coordinates moveRandomly();
     std::thread spawn(std::shared_ptr<Drawer>& drawer);
     void kill();
@@ -39,6 +43,7 @@ private:
     Coordinates limits;
     bool dead;
 
+    std::shared_ptr<Leaf> currentLeaf;
     std::shared_ptr<Drawer> drawer;
 };
 

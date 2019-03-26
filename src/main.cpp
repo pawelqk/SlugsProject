@@ -23,22 +23,26 @@ int main()
     }
     
     start_color();
-    init_pair(1, COLOR_BLACK, HEALTHY_GREEN);
+    init_pair(1, COLOR_BLACK, HEALTHY_GREEN); // TODO: drawer should be the only class that has knowledge about colours
 
     SlugColony colony{COLONY_SIZE};
     Coordinates sizes{WIDTH, HEIGHT};
     colony.createColony(sizes);
+
+    std::vector<std::vector<std::shared_ptr<Leaf>>> leaves(HEIGHT, std::vector<std::shared_ptr<Leaf>>(WIDTH));
     
     std::vector<Coordinates> startingCoords;
     startingCoords.reserve(COLONY_SIZE);
-    for (auto& slug : colony.getColony())
+
+    auto newColony = colony.getColony();
+    for (auto& slug : newColony)
     {
         startingCoords.emplace_back(slug.getLeafCoords());
+        slug.setLeaf(leaves[slug.getLeafCoords().first][slug.getLeafCoords().second]);
     }
     auto drawer = std::make_shared<Drawer>(WIDTH, HEIGHT);
     drawer->drawLeaf();
     drawer->drawColony(startingCoords);
-    auto newColony = colony.getColony();
 
     for (auto& slug : newColony)
     {
