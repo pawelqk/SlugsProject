@@ -31,6 +31,8 @@ public:
     void kill();
 private:
     void live();
+    bool moveIsPossible(Move move);
+    void changePlace(Move move);
 
     uint8_t health;
     Coordinates leafCoords;
