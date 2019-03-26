@@ -57,15 +57,20 @@ void Slug::live()
         if (currentLeaf->getSize() != 0)
         {
             currentLeaf->eat();
+            leafLock.lock();
             drawer->updateLeaf(leafCoords, currentLeaf->getSize());
-            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            leafLock.unlock();
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
         else
         {
-            lock.lock();
+            movingLock.lock();
             auto oldCoords = moveRandomly();
             drawer->updatePosition(oldCoords, leafCoords);
-            lock.unlock();
+            movingLock.unlock();
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
     }
 }

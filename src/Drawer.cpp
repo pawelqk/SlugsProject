@@ -32,8 +32,21 @@ void Drawer::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
     refresh();
 }
 
-void Drawer::updateLeaf(Coordinates& leafPosition, uint8_t leafSize)
+void Drawer::updateLeaf(Coordinates& leafPosition, uint8_t leafSize)    // TODO: this method looks bizarre
 {
+    uint16_t currentColor = colorPair;
+    uint16_t leafColor = getColorBasedOnLeafSize(leafSize);
+    // attroff(COLOR_PAIR(currentColor));
+    attron(leafColor);
     move(leafPosition.second, leafPosition.first);
+    printw(" ");
+    curs_set(0);
+    refresh();
+    // attroff(leafColor);
+    attron(currentColor);
+}
 
+uint16_t Drawer::getColorBasedOnLeafSize(uint16_t leafSize)
+{
+    return 2;
 }

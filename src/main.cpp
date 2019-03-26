@@ -7,10 +7,11 @@
 
 static const uint16_t WIDTH = 100;
 static const uint16_t HEIGHT = 40;
-static const unsigned int HEALTHY_GREEN = 41;
-static const uint16_t COLONY_SIZE = 40;
+static const uint16_t HEALTHY_GREEN = 41;
+static const uint16_t WEAK_GREEN = 41;
+static const uint16_t COLONY_SIZE = 1;
 
-
+uint16_t Drawer::colorPair = 1;
 int main()
 {
     std::vector<std::thread> threads;
@@ -24,12 +25,14 @@ int main()
     
     start_color();
     init_pair(1, COLOR_BLACK, HEALTHY_GREEN); // TODO: drawer should be the only class that has knowledge about colours
+    init_pair(2, COLOR_BLACK, WEAK_GREEN); // TODO: drawer should be the only class that has knowledge about colours
+
 
     SlugColony colony{COLONY_SIZE};
     Coordinates sizes{WIDTH, HEIGHT};
     colony.createColony(sizes);
 
-    std::vector<std::vector<std::shared_ptr<Leaf>>> leaves(HEIGHT, std::vector<std::shared_ptr<Leaf>>(WIDTH));
+    std::vector<std::vector<std::shared_ptr<Leaf>>> leaves(HEIGHT, std::vector<std::shared_ptr<Leaf>>(WIDTH, std::make_shared<Leaf>()));
     
     std::vector<Coordinates> startingCoords;
     startingCoords.reserve(COLONY_SIZE);
@@ -38,7 +41,7 @@ int main()
     for (auto& slug : newColony)
     {
         startingCoords.emplace_back(slug.getLeafCoords());
-        slug.setLeaf(leaves[slug.getLeafCoords().first][slug.getLeafCoords().second]);
+        slug.setLeaf(leaves[slug.getLeafCoords().second][slug.getLeafCoords().first]);  
     }
     auto drawer = std::make_shared<Drawer>(WIDTH, HEIGHT);
     drawer->drawLeaf();
