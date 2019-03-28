@@ -11,11 +11,18 @@ using Coordinates = std::pair<uint16_t, uint16_t>;
 class Drawer
 {
 public:
+    static uint16_t colorPair;
+
     Drawer(uint16_t width, uint16_t height);
+    ~Drawer();
     void drawLeaf();
     void drawColony(std::vector<Coordinates>& slugPositions);
     void updatePosition(Coordinates& oldCoords, Coordinates& newCoords);
+    void updateLeaf(Coordinates& leafPosition, uint8_t leafSize);
 private:
+    void initColoring();
+    uint16_t getColorBasedOnLeafSize(uint16_t leafSize);
+
     uint16_t width;
     uint16_t height;
 };

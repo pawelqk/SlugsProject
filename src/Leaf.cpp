@@ -2,12 +2,33 @@
 
 #include <iostream>
 
-Leaf::Leaf()
+Leaf::Leaf(): Leaf(100u)
+{}
+
+Leaf::Leaf(uint8_t size): size(size)
+{}
+
+uint8_t Leaf::getSize()
 {
-    std::cout << "hello, im Leaf\n";
+    return size;
 }
 
-Leaf::~Leaf()
+bool Leaf::getTaken()
 {
-    std::cout << "Im leafing...\n";
+    return taken;
+}
+
+void Leaf::setTaken(bool taken)
+{
+    this->taken = taken;
+}
+
+void Leaf::regenerate()
+{
+    ++size;
+}
+
+void Leaf:: eat()
+{
+    --size;
 }
