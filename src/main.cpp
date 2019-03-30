@@ -9,7 +9,6 @@ static const uint16_t WIDTH = 100;
 static const uint16_t HEIGHT = 40;
 static const uint16_t COLONY_SIZE = 10;
 
-uint16_t Drawer::colorPair = 1;
 int main()
 {
     std::vector<std::thread> threads;

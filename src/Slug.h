@@ -25,6 +25,7 @@ public:
         RIGHT
     };
 
+    Slug() = default;
     Slug(Coordinates leafCoords, Coordinates limits);
     uint8_t getHealth();
     const Coordinates& getLeafCoords() const;

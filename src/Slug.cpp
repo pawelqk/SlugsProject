@@ -42,7 +42,7 @@ Coordinates Slug::moveRandomly() // TODO: better!!!
 std::thread Slug::spawn(std::shared_ptr<Drawer>& drawer)
 {
     this->drawer = drawer;
-    return std::thread([=]{ live();});
+    return std::thread([this]{ live(); });
 }
 
 void Slug::kill()

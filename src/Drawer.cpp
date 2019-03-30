@@ -1,10 +1,12 @@
 #include "Drawer.h"
 #include <stdexcept>
+#include <thread>
 
 namespace
 {
     const uint16_t HEALTHY_GREEN = 41;
     const uint16_t WEAK_GREEN = 44;
+    const uint16_t colorPair = 1;
 }
 
 Drawer::Drawer(uint16_t width, uint16_t height): width(width), height(height)
@@ -64,6 +66,26 @@ void Drawer::updateLeaf(Coordinates& leafPosition, uint8_t leafSize)    // TODO:
     refresh();
     attroff(COLOR_PAIR(leafColor));
     attron(COLOR_PAIR(currentColor));
+}
+
+std::thread Drawer::spawnRefreshingThread()
+{
+    return std::thread([this](){ refreshScreen(); });
+}
+
+void Drawer::refreshScreen()
+{
+    while (true)
+    {
+        // color change:
+        // slug -> ill slug
+        // leaf <-> weak leaf
+        // move
+        // slug moves
+        // slug disappears
+        // slug appears   
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
 }
 
 void Drawer::initColoring()
