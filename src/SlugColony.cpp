@@ -27,8 +27,7 @@ void SlugColony::createColony(Coordinates& leafSize)
             x = distX(rng);
             y = distY(rng);
         } while (takenX.find(x) != takenX.end() || takenY.find(y) != takenY.end());
-        // TODO: fix logging and check what really happens beneath
-        logger << "emplacing slug no: " + std::to_string(i) + " with coords: " + std::to_string(x) + " " + std::to_string(y);
+        logger(INFO) << "emplacing slug no: " << i << " with coords: " << x << " " << y << std::endl;
         colony.emplace_back(std::make_pair(x,y), leafSize);
     }
 }

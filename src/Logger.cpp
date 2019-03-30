@@ -3,19 +3,46 @@
 #include <ios>
 #include <string>
 
-
-static const char* fileName = "log";
+namespace
+{
+    const char* fileName = "log";
+    bool isOpen = false;
+}
 
 Logger::Logger(std::string loggerName): loggerName(loggerName)
 {
-    file.open(fileName);
+    if (!isOpen)
+    {
+        file.open(fileName);
+        isOpen = true;
+    }
+    else
+    {
+        file.open(fileName, std::ios::app);
+    }
+
     if (!file.is_open())
     {
         throw std::ios_base::failure("Logging file couldn't be opened");
     }
 }
 
-std::ostream& Logger::operator<<(std::string msg)
+std::ofstream& Logger::operator()(LoggingLevel level)
 {
-    return file << loggerName << ": " << std::string(msg) << std::endl;
+    file << loggerName;
+
+    switch(level)
+    {
+    case LoggingLevel::INFO:
+        file << " [INFO] ";
+        break;
+    case LoggingLevel::DEBUG:
+        file << " [DEBUG] ";
+        break;
+    case LoggingLevel::ERROR:
+        file << " [ERROR] ";
+        break;
+    }
+
+    return file;
 }

@@ -11,6 +11,7 @@ static const uint16_t COLONY_SIZE = 10;
 
 int main()
 {
+    Logger logger("main");
     std::vector<std::thread> threads;
     std::shared_ptr<Drawer> mainDrawer;
     try
@@ -19,7 +20,7 @@ int main()
     }
     catch (std::runtime_error& er)
     {
-        std::cout << er.what() << std::endl;
+        logger(ERROR) << er.what() << std::endl;
         return 1;
     }
 

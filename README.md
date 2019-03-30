@@ -12,3 +12,13 @@ To clean up object files use
 ```
 make clean
 ```
+
+To build unit tests run
+```
+make ut
+```
+To test current source run
+```
+./bin/TestSlugs
+```
+Note: this requires googletest lib installed.

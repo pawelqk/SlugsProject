@@ -2,11 +2,20 @@
 #include <iostream>
 
 
+enum LoggingLevel: uint8_t
+{
+    INFO,
+    DEBUG,
+    ERROR
+};
+
 class Logger
 {
 public:
     Logger(std::string loggerName);
-    std::ostream& operator<<(std::string msg);
+
+    std::ofstream& operator()(LoggingLevel level);
+
 private:
     std::string loggerName;
     std::ofstream file;
