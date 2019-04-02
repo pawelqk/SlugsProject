@@ -1,6 +1,6 @@
 FLAGS = -std=c++17 -c -Wall -Werror
 DEPS = -lncurses -lpthread
-OBJ = bin/src/Drawer.o bin/src/Leaf.o bin/src/Logger.o bin/src/Slug.o bin/src/SlugColony.o
+OBJ = bin/src/Drawer.o bin/src/Leaf.o bin/src/Logger.o bin/src/Slug.o bin/src/SlugColony.o bin/src/LeafField.o
 MAIN_OBJ = bin/src/main.o
 TEST_OBJ = bin/test/utMain.o bin/test/SlugTest.o
 
@@ -15,7 +15,7 @@ ut: directory $(OBJ) $(TEST_OBJ)
 	g++ -o bin/TestSlugs $(TEST_OBJ) $(OBJ) $(DEPS) -lgtest
 
 bin/src/%.o: src/%.cpp
-	g++ $(FLAGS) -o $@ $^
+	g++ -g $(FLAGS) -o $@ $^
 
 bin/test/%.o: test/%.cpp
 	g++ -o $@ $^ $(FLAGS)

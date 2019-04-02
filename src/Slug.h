@@ -30,7 +30,8 @@ public:
     uint8_t getHealth();
     const Coordinates& getLeafCoords() const;
 
-    void setLeaf(std::shared_ptr<Leaf>& leaf);
+    void setLeaf(const std::shared_ptr<Leaf>& leaf);
+    void setLeafField(const std::shared_ptr<LeafField>& leaffield);
 
     Coordinates moveRandomly();
     std::thread spawn(std::shared_ptr<Drawer>& drawer);
@@ -47,6 +48,7 @@ private:
 
     std::shared_ptr<Leaf> currentLeaf;
     std::shared_ptr<Drawer> drawer;
+    std::shared_ptr<LeafField> leafField;
 };
 
 #endif

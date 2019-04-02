@@ -17,9 +17,14 @@ const Coordinates& Slug::getLeafCoords() const
     return leafCoords;
 }
 
-void Slug::setLeaf(std::shared_ptr<Leaf>& leaf)
+void Slug::setLeaf(const std::shared_ptr<Leaf>& leaf)
 {
     currentLeaf = leaf;
+}
+
+void Slug::setLeafField(const std::shared_ptr<LeafField>& leaffield)
+{
+    this->leafField = leafField;
 }
 
 Coordinates Slug::moveRandomly() // TODO: better!!!
@@ -54,24 +59,24 @@ void Slug::live()
 {
     while (!dead)
     {
-        if (currentLeaf->getSize() != 0)
-        {
-            currentLeaf->eat();
-            leafLock.lock();
-            drawer->updateLeaf(leafCoords, currentLeaf->getSize());
-            leafLock.unlock();
+        // if (currentLeaf->getSize() != 0)
+        // {
+        //     currentLeaf->eat();
+        //     leafLock.lock();
+        //     //drawer->updateLeaf(leafCoords, currentLeaf->getSize());
+        //     leafLock.unlock();
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
-        else
-        {
+        //     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        // }
+        // else
+        // {
             movingLock.lock();
             auto oldCoords = moveRandomly();
-            drawer->updatePosition(oldCoords, leafCoords);
+            leafField->updatePosition(oldCoords, leafCoords);
             movingLock.unlock();
 
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        }
+        // }
     }
 }
 

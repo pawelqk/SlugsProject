@@ -10,6 +10,7 @@ SlugColony::SlugColony(uint16_t size): size(size)
 void SlugColony::createColony(Coordinates& leafSize)
 {
     Logger logger("SlugColony::createColony");
+    leafField = std::make_shared<LeafField>(leafSize);
     // TODO: mb extract random instance
     std::random_device dev;
     std::mt19937 rng(dev());
@@ -28,13 +29,23 @@ void SlugColony::createColony(Coordinates& leafSize)
             y = distY(rng);
         } while (takenX.find(x) != takenX.end() || takenY.find(y) != takenY.end());
         logger(INFO) << "emplacing slug no: " << i << " with coords: " << x << " " << y << std::endl;
-        colony.emplace_back(std::make_pair(x,y), leafSize);
+
+        Slug slug(std::make_pair(x,y), leafSize);
+        auto leaf = leafField->getLeaf(x, y);
+        leaf->setTaken(true);
+        slug.setLeaf(leaf);
+        colony.push_back(slug);
     }
 }
 
 const std::vector<Slug>& SlugColony::getColony() const
 {
     return colony;
+}
+
+const std::shared_ptr<LeafField>& SlugColony::getLeafField() const
+{
+    return leafField;
 }
 
 void SlugColony::setColony(std::vector<Slug>& newColony)

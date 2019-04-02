@@ -5,7 +5,7 @@
 Leaf::Leaf(): Leaf(100u)
 {}
 
-Leaf::Leaf(uint8_t size): size(size)
+Leaf::Leaf(uint8_t size): size(size), taken(false)
 {}
 
 uint8_t Leaf::getSize()
