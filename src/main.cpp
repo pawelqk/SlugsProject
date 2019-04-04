@@ -1,17 +1,17 @@
 #include "Drawer.h"
 #include "SlugColony.h"
-#include "Logger.h"
+// #include "Logger.h"
 
 #include <curses.h>
 #include <string>
 
 static const uint16_t WIDTH = 100;
 static const uint16_t HEIGHT = 40;
-static const uint16_t COLONY_SIZE = 1;
+static const uint16_t COLONY_SIZE = 100;
 
 int main()
 {
-    Logger logger("main");
+    // Logger logger("main");
     std::vector<std::thread> threads;
     std::shared_ptr<Drawer> mainDrawer;
     try
@@ -20,7 +20,7 @@ int main()
     }
     catch (std::runtime_error& er)
     {
-        logger(ERROR) << er.what() << std::endl;
+        // logger(ERROR) << er.what() << std::endl;
         return 1;
     }
 
@@ -43,7 +43,7 @@ int main()
 
     for (auto& slug : newColony)
     {
-        threads.emplace_back(slug.spawn(mainDrawer));
+        threads.push_back(slug.spawn(mainDrawer));
     }
 
     drawerThread.join();

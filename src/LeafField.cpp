@@ -1,12 +1,16 @@
 #include "LeafField.h"
-
+#include <iostream>
 
 LeafField::LeafField(std::pair<uint16_t, uint16_t>& sizes)
 {
     leaves.resize(sizes.first);
     for (auto& row : leaves)
     {
-        row = std::vector<LeafPtr>(sizes.second, std::make_shared<Leaf>());
+        row = std::vector<LeafPtr>(sizes.second);
+        for (auto& leaf : row)
+        {
+            leaf = std::make_shared<Leaf>();
+        }
     }
 }
 
@@ -22,6 +26,6 @@ const LeafPtr& LeafField::getLeaf(uint16_t x, uint16_t y) const
 
 void LeafField::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
 {
-    leaves[oldCoords.second][oldCoords.first]->setTaken(false);
-    leaves[newCoords.second][newCoords.first]->setTaken(true);
+    leaves[oldCoords.first][oldCoords.second]->setTaken(false);
+    leaves[newCoords.first][newCoords.second]->setTaken(true);
 }

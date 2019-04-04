@@ -31,7 +31,7 @@ public:
     const Coordinates& getLeafCoords() const;
 
     void setLeaf(const std::shared_ptr<Leaf>& leaf);
-    void setLeafField(const std::shared_ptr<LeafField>& leaffield);
+    void setLeafField(const std::shared_ptr<LeafField>& leafField);
 
     Coordinates moveRandomly();
     std::thread spawn(std::shared_ptr<Drawer>& drawer);

@@ -10,14 +10,14 @@ namespace
     const uint16_t colorPair = 1;
 }
 
-Drawer::Drawer(uint16_t width, uint16_t height): width(width), height(height), logger("Drawer")
+Drawer::Drawer(uint16_t width, uint16_t height): width(width), height(height)
 {
     initscr();
     if (has_colors() == FALSE)
     {
         throw std::runtime_error("Your terminal doesn't support colors. This program will not start");
     }
-    logger(DEBUG) << "Creating drawer with width: " << width << " and height: " << height << std::endl;
+    // logger(DEBUG) << "Creating drawer with width: " << width << " and height: " << height << std::endl;
     initColoring();
 }
 
@@ -84,10 +84,11 @@ void Drawer::refreshScreen()
             for (auto j = 0u; j < height; j++)
             {
                 move(j, i);
-                logger(DEBUG) << __FUNCTION__ << "Checking height: " << i << " width: " << j << std::endl;
+                // logger(DEBUG) << __FUNCTION__ << "Checking height: " << i << " width: " << j << std::endl;
 
                 if (leaves[i][j]->getTaken())
                 {
+                    // logger(DEBUG) << "Found taken leaf at width " << i << " height: " << j << std::endl;
                     printw("x");
                 }
                 else

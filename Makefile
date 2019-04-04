@@ -1,6 +1,6 @@
 FLAGS = -std=c++17 -c -Wall -Werror
 DEPS = -lncurses -lpthread
-OBJ = bin/src/Drawer.o bin/src/Leaf.o bin/src/Logger.o bin/src/Slug.o bin/src/SlugColony.o bin/src/LeafField.o
+OBJ = bin/src/Drawer.o bin/src/Leaf.o bin/src/Slug.o bin/src/SlugColony.o bin/src/LeafField.o
 MAIN_OBJ = bin/src/main.o
 TEST_OBJ = bin/test/utMain.o bin/test/SlugTest.o
 

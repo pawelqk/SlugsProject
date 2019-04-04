@@ -22,7 +22,7 @@ void Slug::setLeaf(const std::shared_ptr<Leaf>& leaf)
     currentLeaf = leaf;
 }
 
-void Slug::setLeafField(const std::shared_ptr<LeafField>& leaffield)
+void Slug::setLeafField(const std::shared_ptr<LeafField>& leafField)
 {
     this->leafField = leafField;
 }
@@ -30,12 +30,12 @@ void Slug::setLeafField(const std::shared_ptr<LeafField>& leaffield)
 Coordinates Slug::moveRandomly() // TODO: better!!!
 {
     // TODO: extract random
-    std::random_device dev;
-    std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist(1, 4);
+    // std::random_device dev;
+    // std::mt19937 rng(dev());
+    // std::uniform_int_distribution<std::mt19937::result_type> dist(1, 4);
     auto oldCoords = leafCoords;
 
-    Move move = static_cast<Move>(dist(rng));
+    Move move = static_cast<Move>(rand() % 4 + 1);
     if (moveIsPossible(move))
     {
         changePlace(move);
@@ -70,6 +70,8 @@ void Slug::live()
         // }
         // else
         // {
+
+            // std::cout << std::hex << leafField.get() << std::endl;
             movingLock.lock();
             auto oldCoords = moveRandomly();
             leafField->updatePosition(oldCoords, leafCoords);
@@ -85,13 +87,13 @@ bool Slug::moveIsPossible(Move move)
     switch(move)
     {
     case UP:
-        return leafCoords.second > 0;
+        return leafCoords.second > 0 && !leafField->getLeaf(leafCoords.first, leafCoords.second - 1)->getTaken();
     case DOWN:
-        return leafCoords.second < limits.second - 1;
+        return leafCoords.second < limits.second - 1 && !leafField->getLeaf(leafCoords.first, leafCoords.second + 1)->getTaken();
     case LEFT:
-        return leafCoords.first > 0;
+        return leafCoords.first > 0 && !leafField->getLeaf(leafCoords.first - 1, leafCoords.second)->getTaken();
     case RIGHT:
-        return leafCoords.first < limits.first - 1;
+        return leafCoords.first < limits.first - 1 && !leafField->getLeaf(leafCoords.first + 1, leafCoords.second)->getTaken();
     default:
         // TODO: log here!
         return false;

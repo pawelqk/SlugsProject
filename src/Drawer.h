@@ -2,7 +2,7 @@
 #define __DRAWER_H__
 
 #include "LeafField.h"
-#include "Logger.h"
+// #include "Logger.h"
 
 #include <cstdint>
 #include <curses.h>
@@ -32,7 +32,7 @@ private:
     uint16_t width;
     uint16_t height;
 
-    Logger logger;
+    // Logger logger;
 };
 
 #endif
