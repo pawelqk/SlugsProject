@@ -4,6 +4,7 @@
 #include "Leaf.h"
 
 #include <memory>
+#include <thread>
 #include <vector>
 
 using Coordinates = std::pair<uint16_t, uint16_t>;
@@ -18,9 +19,12 @@ public:
     const LeafMatrix& getLeaves() const;
     const LeafPtr& getLeaf(uint16_t x, uint16_t y) const;
 
-    void updatePosition(Coordinates& oldCoords, Coordinates& newCoords);
+    LeafPtr& updatePosition(Coordinates& oldCoords, Coordinates& newCoords);
+    std::thread spawnRebuildingThread();
 
 private:
+    void rebuild();
+
     LeafMatrix leaves;
 };
 

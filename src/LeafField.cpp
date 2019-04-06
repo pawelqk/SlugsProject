@@ -1,6 +1,12 @@
 #include "LeafField.h"
 #include <iostream>
 
+namespace
+{
+    constexpr uint16_t REBUILD_PERIOD = 3000;
+}
+
+
 LeafField::LeafField(std::pair<uint16_t, uint16_t>& sizes)
 {
     leaves.resize(sizes.first);
@@ -24,8 +30,32 @@ const LeafPtr& LeafField::getLeaf(uint16_t x, uint16_t y) const
     return leaves[x][y];
 }
 
-void LeafField::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
+LeafPtr& LeafField::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
 {
     leaves[oldCoords.first][oldCoords.second]->setTaken(false);
     leaves[newCoords.first][newCoords.second]->setTaken(true);
+    return leaves[newCoords.first][newCoords.second];
+}
+
+std::thread LeafField::spawnRebuildingThread()
+{
+    return std::thread([this](){ rebuild(); });
+}
+
+void LeafField::rebuild()
+{
+    while (true)
+    {
+        for (auto& row : leaves)
+        {
+            for (auto& leaf : row)
+            {
+                if (leaf->getSize() < 100 && !leaf->getTaken())
+                {
+                    leaf->regenerate();
+                }
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(REBUILD_PERIOD));
+    }
 }

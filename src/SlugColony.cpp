@@ -1,4 +1,3 @@
-// #include "Logger.h"
 #include "SlugColony.h"
 
 #include <iostream>
@@ -30,7 +29,6 @@ void SlugColony::createColony(Coordinates& leafSize)
             x = rand() % leafSize.first;
             y = rand() % leafSize.second;
         } while (takenX.find(x) != takenX.end() || takenY.find(y) != takenY.end());
-        // logger(INFO) << "emplacing slug no: " << i << " with coords: " << x << " " << y << std::endl;
 
         Slug slug(std::make_pair(x,y), leafSize);
         auto leaf = leafField->getLeaf(x, y);

@@ -17,7 +17,6 @@ Drawer::Drawer(uint16_t width, uint16_t height): width(width), height(height)
     {
         throw std::runtime_error("Your terminal doesn't support colors. This program will not start");
     }
-    // logger(DEBUG) << "Creating drawer with width: " << width << " and height: " << height << std::endl;
     initColoring();
 }
 
@@ -84,17 +83,29 @@ void Drawer::refreshScreen()
             for (auto j = 0u; j < height; j++)
             {
                 move(j, i);
-                // logger(DEBUG) << __FUNCTION__ << "Checking height: " << i << " width: " << j << std::endl;
+                if (leaves[i][j]->getSize() == 0)
+                {
+                    attroff(COLOR_PAIR(1));
+                    attron(COLOR_PAIR(3));
+                }
+                else if (leaves[i][j]->getSize() < 30)
+                {
+                    attroff(COLOR_PAIR(1));
+                    attron(COLOR_PAIR(2));
+                }
 
                 if (leaves[i][j]->getTaken())
-                {
-                    // logger(DEBUG) << "Found taken leaf at width " << i << " height: " << j << std::endl;
+                {   
                     printw("x");
                 }
                 else
                 {
                     printw(" ");
                 }
+
+                attroff(COLOR_PAIR(2));
+                attroff(COLOR_PAIR(3));
+                attron(COLOR_PAIR(1));
             }
         }
         refresh();
@@ -107,6 +118,7 @@ void Drawer::initColoring()
     start_color();
     init_pair(1, COLOR_BLACK, HEALTHY_GREEN);
     init_pair(2, COLOR_BLACK, WEAK_GREEN);
+    init_pair(3, COLOR_BLACK, COLOR_BLACK);
     attron(COLOR_PAIR(1));
 }
 

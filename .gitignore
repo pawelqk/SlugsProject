@@ -2,3 +2,4 @@
 log
 bin/
 tags
+compile_commands.json

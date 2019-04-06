@@ -1,17 +1,15 @@
 #include "Drawer.h"
 #include "SlugColony.h"
-// #include "Logger.h"
 
 #include <curses.h>
 #include <string>
 
 static const uint16_t WIDTH = 100;
 static const uint16_t HEIGHT = 40;
-static const uint16_t COLONY_SIZE = 100;
+static const uint16_t COLONY_SIZE = 20;
 
 int main()
 {
-    // Logger logger("main");
     std::vector<std::thread> threads;
     std::shared_ptr<Drawer> mainDrawer;
     try
@@ -20,7 +18,6 @@ int main()
     }
     catch (std::runtime_error& er)
     {
-        // logger(ERROR) << er.what() << std::endl;
         return 1;
     }
 
@@ -35,17 +32,18 @@ int main()
     for (auto& slug : newColony)
     {
         startingCoords.emplace_back(slug.getLeafCoords());
-        // slug.setLeaf(leaves[slug.getLeafCoords().second][slug.getLeafCoords().first]);  
     }
 
     auto leafField = colony.getLeafField()->getLeaves();
-    auto drawerThread = mainDrawer->spawnRefreshingThread(leafField);
 
+    auto drawerThread = mainDrawer->spawnRefreshingThread(leafField);
+    auto rebuildThread = colony.getLeafField()->spawnRebuildingThread();
     for (auto& slug : newColony)
     {
         threads.push_back(slug.spawn(mainDrawer));
     }
 
+    rebuildThread.join();
     drawerThread.join();
     for (auto& thread : threads)
     {

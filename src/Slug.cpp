@@ -40,7 +40,7 @@ Coordinates Slug::moveRandomly() // TODO: better!!!
     {
         changePlace(move);
     }
-
+    
     return oldCoords;
 }
 
@@ -59,26 +59,20 @@ void Slug::live()
 {
     while (!dead)
     {
-        // if (currentLeaf->getSize() != 0)
-        // {
-        //     currentLeaf->eat();
-        //     leafLock.lock();
-        //     //drawer->updateLeaf(leafCoords, currentLeaf->getSize());
-        //     leafLock.unlock();
-
-        //     std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        // }
-        // else
-        // {
-
-            // std::cout << std::hex << leafField.get() << std::endl;
+        if (currentLeaf->getSize() != 0)
+        {
+            currentLeaf->eat();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+        else
+        {
             movingLock.lock();
             auto oldCoords = moveRandomly();
-            leafField->updatePosition(oldCoords, leafCoords);
+            currentLeaf = leafField->updatePosition(oldCoords, leafCoords);
             movingLock.unlock();
 
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        // }
+        }
     }
 }
 
