@@ -45,6 +45,7 @@ private:
     Coordinates leafCoords;
     Coordinates limits;
     bool dead;
+    bool ill;
 
     std::shared_ptr<Leaf> currentLeaf;
     std::shared_ptr<Drawer> drawer;

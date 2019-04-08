@@ -12,6 +12,7 @@ public:
 
     uint8_t getSize();
     bool getTaken();
+    bool getIll();
     
     void setTaken(bool taken);
 
@@ -20,6 +21,7 @@ public:
 private:
     uint8_t size;
     bool taken;
+    bool ill;
 };
 
 #endif

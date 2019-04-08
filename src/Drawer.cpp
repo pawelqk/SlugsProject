@@ -7,6 +7,7 @@ namespace
 {
     const uint16_t HEALTHY_GREEN = 41;
     const uint16_t WEAK_GREEN = 44;
+    const uint16_t ILL_LEAF = 13;
     const uint16_t colorPair = 1;
 }
 
@@ -83,7 +84,12 @@ void Drawer::refreshScreen()
             for (auto j = 0u; j < height; j++)
             {
                 move(j, i);
-                if (leaves[i][j]->getSize() == 0)
+                if (leaves[i][j]->getIll())
+                {
+                   attroff(COLOR_PAIR(1));
+                   attron(COLOR_PAIR(4));
+                }
+                else if (leaves[i][j]->getSize() == 0)
                 {
                     attroff(COLOR_PAIR(1));
                     attron(COLOR_PAIR(3));
@@ -95,7 +101,7 @@ void Drawer::refreshScreen()
                 }
 
                 if (leaves[i][j]->getTaken())
-                {   
+                {
                     printw("x");
                 }
                 else
@@ -105,6 +111,7 @@ void Drawer::refreshScreen()
 
                 attroff(COLOR_PAIR(2));
                 attroff(COLOR_PAIR(3));
+                attroff(COLOR_PAIR(4));
                 attron(COLOR_PAIR(1));
             }
         }
@@ -119,6 +126,7 @@ void Drawer::initColoring()
     init_pair(1, COLOR_BLACK, HEALTHY_GREEN);
     init_pair(2, COLOR_BLACK, WEAK_GREEN);
     init_pair(3, COLOR_BLACK, COLOR_BLACK);
+    init_pair(4, COLOR_BLACK, ILL_LEAF);
     attron(COLOR_PAIR(1));
 }
 

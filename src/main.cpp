@@ -13,7 +13,7 @@ int main()
     std::vector<std::thread> threads;
     std::shared_ptr<Drawer> mainDrawer;
     try
-    {   // TODO: check on wrong terminal if it works
+    {
         mainDrawer = std::make_shared<Drawer>(WIDTH, HEIGHT);
     }
     catch (std::runtime_error& er)

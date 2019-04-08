@@ -4,7 +4,7 @@
 #include <random>
 
 Slug::Slug(Coordinates leafCoords, Coordinates limits):
-leafCoords(leafCoords), limits(limits), dead(false)
+leafCoords(leafCoords), limits(limits), dead(false), ill(false)
 {}
 
 uint8_t Slug::getHealth()
@@ -62,6 +62,10 @@ void Slug::live()
         if (currentLeaf->getSize() != 0)
         {
             currentLeaf->eat();
+            if (currentLeaf->getIll() && rand() % 2 == 0)   // TODO: replace random
+            {
+                ill = true;
+            }
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
         else
