@@ -13,16 +13,16 @@ using LeafPtr = std::shared_ptr<Leaf>;
 
 class LeafField
 {
-public:
-    LeafField(std::pair<uint16_t, uint16_t>& sizes);
+ public:
+    explicit LeafField(const std::pair<uint16_t, uint16_t>& sizes);
 
     const LeafMatrix& getLeaves() const;
     const LeafPtr& getLeaf(uint16_t x, uint16_t y) const;
 
-    LeafPtr& updatePosition(Coordinates& oldCoords, Coordinates& newCoords);
+    LeafPtr& updatePosition(const Coordinates& oldCoords, const Coordinates& newCoords);
     std::thread spawnRebuildingThread();
 
-private:
+ private:
     void rebuild();
 
     LeafMatrix leaves;

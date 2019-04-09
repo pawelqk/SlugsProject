@@ -32,7 +32,7 @@ void Leaf::regenerate()
 {
     if (size++ == 0)
     {
-        if (rand() % 5 == 0) // TODO: replace with real random engine
+        if (rand() % 5 == 0)  // TODO: replace with real random engine
         {
            ill = true;
         }

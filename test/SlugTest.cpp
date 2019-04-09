@@ -6,3 +6,4 @@ TEST_F(SlugShould, ProperlyInitiateSlug)
 {
     EXPECT_NE(slug, nullptr);
 }
+

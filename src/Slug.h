@@ -16,7 +16,7 @@ static std::mutex leafLock;
 
 class Slug
 {
-public:
+ public:
     enum Move: uint8_t
     {
         UP = 1,
@@ -34,9 +34,9 @@ public:
     void setLeafField(const std::shared_ptr<LeafField>& leafField);
 
     Coordinates moveRandomly();
-    std::thread spawn(std::shared_ptr<Drawer>& drawer);
+    std::thread spawn(const std::shared_ptr<Drawer>& drawer);
     void kill();
-private:
+ private:
     void live();
     bool moveIsPossible(Move move);
     void changePlace(Move move);

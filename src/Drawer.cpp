@@ -36,16 +36,16 @@ void Drawer::drawLeaf()
     }
 }
 
-void Drawer::drawColony(std::vector<Coordinates>& slugPositions)
+void Drawer::drawColony(const std::vector<Coordinates>& slugPositions)
 {
     for (auto& position : slugPositions)
     {
-        move(position.second, position.first); // TODO: Check why this is inverted
+        move(position.second, position.first);  // TODO: Check why this is inverted
         printw("x");
     }
 }
 
-void Drawer::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
+void Drawer::updatePosition(const Coordinates& oldCoords, const Coordinates& newCoords)
 {
     move(oldCoords.second, oldCoords.first);
     printw(" ");
@@ -55,7 +55,7 @@ void Drawer::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
     refresh();
 }
 
-void Drawer::updateLeaf(Coordinates& leafPosition, uint8_t leafSize)    // TODO: this method looks bizarre
+void Drawer::updateLeaf(const Coordinates& leafPosition, uint8_t leafSize)    // TODO: this method looks bizarre
 {
     // uint16_t currentColor = colorPair;
     // uint16_t leafColor = getColorBasedOnLeafSize(leafSize);
@@ -69,7 +69,7 @@ void Drawer::updateLeaf(Coordinates& leafPosition, uint8_t leafSize)    // TODO:
     // attron(COLOR_PAIR(currentColor));
 }
 
-std::thread Drawer::spawnRefreshingThread(LeafMatrix& leaves)
+std::thread Drawer::spawnRefreshingThread(const LeafMatrix& leaves)
 {
     this->leaves = leaves;
     return std::thread([this](){ refreshScreen(); });

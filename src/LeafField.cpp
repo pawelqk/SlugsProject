@@ -7,7 +7,7 @@ namespace
 }
 
 
-LeafField::LeafField(std::pair<uint16_t, uint16_t>& sizes)
+LeafField::LeafField(const std::pair<uint16_t, uint16_t>& sizes)
 {
     leaves.resize(sizes.first);
     for (auto& row : leaves)
@@ -30,7 +30,7 @@ const LeafPtr& LeafField::getLeaf(uint16_t x, uint16_t y) const
     return leaves[x][y];
 }
 
-LeafPtr& LeafField::updatePosition(Coordinates& oldCoords, Coordinates& newCoords)
+LeafPtr& LeafField::updatePosition(const Coordinates& oldCoords, const Coordinates& newCoords)
 {
     leaves[oldCoords.first][oldCoords.second]->setTaken(false);
     leaves[newCoords.first][newCoords.second]->setTaken(true);
@@ -59,3 +59,4 @@ void LeafField::rebuild()
         std::this_thread::sleep_for(std::chrono::milliseconds(REBUILD_PERIOD));
     }
 }
+

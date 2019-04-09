@@ -24,11 +24,11 @@ int main()
     SlugColony colony{COLONY_SIZE};
     Coordinates sizes{WIDTH, HEIGHT};
     colony.createColony(sizes);
-    
+
     std::vector<Coordinates> startingCoords;
     startingCoords.reserve(COLONY_SIZE);
 
-    auto newColony = colony.getColony();    
+    auto newColony = colony.getColony();
     for (auto& slug : newColony)
     {
         startingCoords.emplace_back(slug.getLeafCoords());

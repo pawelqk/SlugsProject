@@ -11,3 +11,4 @@ struct SlugShould : public testing::Test
         slug = std::make_unique<Slug>();
     }
 };
+

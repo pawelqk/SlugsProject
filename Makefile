@@ -7,6 +7,7 @@ TEST_OBJ = bin/test/utMain.o bin/test/SlugTest.o
 .PHONY:
 	clean
 	ut
+	lint
 
 all: directory $(OBJ) $(MAIN_OBJ)
 	g++ -o bin/Slugs $(MAIN_OBJ) $(OBJ) $(DEPS)
@@ -19,6 +20,9 @@ bin/src/%.o: src/%.cpp
 
 bin/test/%.o: test/%.cpp
 	g++ -o $@ $^ $(FLAGS)
+
+lint:
+	cpplint src/* test/*
 
 directory:
 	mkdir -p bin/src bin/test

@@ -5,20 +5,20 @@
 
 class Leaf
 {
-public:
+ public:
     Leaf();
-    Leaf(uint8_t size);
+    explicit Leaf(uint8_t size);
     ~Leaf() = default;
 
     uint8_t getSize();
     bool getTaken();
     bool getIll();
-    
+
     void setTaken(bool taken);
 
     void regenerate();
     void eat();
-private:
+ private:
     uint8_t size;
     bool taken;
     bool ill;

@@ -27,7 +27,7 @@ void Slug::setLeafField(const std::shared_ptr<LeafField>& leafField)
     this->leafField = leafField;
 }
 
-Coordinates Slug::moveRandomly() // TODO: better!!!
+Coordinates Slug::moveRandomly()  // TODO: better!!!
 {
     // TODO: extract random
     // std::random_device dev;
@@ -40,11 +40,11 @@ Coordinates Slug::moveRandomly() // TODO: better!!!
     {
         changePlace(move);
     }
-    
+
     return oldCoords;
 }
 
-std::thread Slug::spawn(std::shared_ptr<Drawer>& drawer)
+std::thread Slug::spawn(const std::shared_ptr<Drawer>& drawer)
 {
     this->drawer = drawer;
     return std::thread([this]{ live(); });
@@ -82,7 +82,7 @@ void Slug::live()
 
 bool Slug::moveIsPossible(Move move)
 {
-    switch(move)
+    switch (move)
     {
     case UP:
         return leafCoords.second > 0 && !leafField->getLeaf(leafCoords.first, leafCoords.second - 1)->getTaken();
@@ -100,7 +100,7 @@ bool Slug::moveIsPossible(Move move)
 
 void Slug::changePlace(Move move)
 {
-    switch(move)
+    switch (move)
     {
     case UP:
         leafCoords.second--;
