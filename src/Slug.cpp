@@ -1,5 +1,5 @@
 #include "Slug.h"
-
+#include "SlugColony.h"
 #include <iostream>
 #include <random>
 

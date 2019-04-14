@@ -11,9 +11,10 @@ namespace
     const uint16_t colorPair = 1;
 }
 
-Drawer::Drawer(uint16_t width, uint16_t height): width(width), height(height)
+Drawer::Drawer(uint16_t width, uint16_t height): width(width), height(height), work(true)
 {
     initscr();
+    noecho();
     if (has_colors() == FALSE)
     {
         throw std::runtime_error("Your terminal doesn't support colors. This program will not start");
@@ -75,34 +76,39 @@ std::thread Drawer::spawnRefreshingThread(const LeafMatrix& leaves)
     return std::thread([this](){ refreshScreen(); });
 }
 
+void Drawer::end()
+{
+    work = false;
+}
+
 void Drawer::refreshScreen()
 {
-    while (true)
+    while (work)
     {
         for (auto i = 0u; i < width; i++)
         {
             for (auto j = 0u; j < height; j++)
             {
                 move(j, i);
-                auto color = generateColor(5);
-                attroff(COLOR_PAIR(1));
-                attron(COLOR_PAIR(color));
+                // auto color = generateColor(5);
+                // attroff(COLOR_PAIR(1));
+                // attron(COLOR_PAIR(color));
 
-                // if (leaves[i][j]->getIll())
-                // {
-                //    attroff(COLOR_PAIR(1));
-                //    attron(COLOR_PAIR(4));
-                // }
-                // else if (leaves[i][j]->getSize() == 0)
-                // {
-                //     attroff(COLOR_PAIR(1));
-                //     attron(COLOR_PAIR(3));
-                // }
-                // else if (leaves[i][j]->getSize() < 30)
-                // {
-                //     attroff(COLOR_PAIR(1));
-                //     attron(COLOR_PAIR(2));
-                // }
+                if (leaves[i][j]->getIll())
+                {
+                   attroff(COLOR_PAIR(1));
+                   attron(COLOR_PAIR(4));
+                }
+                else if (leaves[i][j]->getSize() == 0)
+                {
+                    attroff(COLOR_PAIR(1));
+                    attron(COLOR_PAIR(3));
+                }
+                else if (leaves[i][j]->getSize() < 30)
+                {
+                    attroff(COLOR_PAIR(1));
+                    attron(COLOR_PAIR(2));
+                }
 
                 if (leaves[i][j]->getTaken())
                 {
@@ -113,9 +119,9 @@ void Drawer::refreshScreen()
                     printw(" ");
                 }
 
-                // attroff(COLOR_PAIR(2));
-                // attroff(COLOR_PAIR(3));
-                attroff(COLOR_PAIR(color));
+                attroff(COLOR_PAIR(2));
+                attroff(COLOR_PAIR(3));
+                // attroff(COLOR_PAIR(color));
                 attron(COLOR_PAIR(1));
             }
         }

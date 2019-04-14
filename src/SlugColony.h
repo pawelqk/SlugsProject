@@ -15,8 +15,10 @@ class SlugColony
     explicit SlugColony(uint16_t size);
     void createColony(const Coordinates& leafSize);
 
-    const std::map<Coordinates, Slug>& getColony() const;
+    std::map<Coordinates, Slug>& getColony();
     const std::shared_ptr<LeafField>& getLeafField() const;
+
+    void end();
 
  private:
     uint16_t size;

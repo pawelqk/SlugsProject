@@ -22,6 +22,7 @@ class Drawer
     void updateLeaf(const Coordinates& leafPosition, uint8_t leafSize);
 
     std::thread spawnRefreshingThread(const LeafMatrix& leaves);
+    void end();
  private:
     void refreshScreen();
     void initColoring();
@@ -30,8 +31,7 @@ class Drawer
     LeafMatrix leaves;
     uint16_t width;
     uint16_t height;
-
-    // Logger logger;
+    bool work;
 };
 
 #endif

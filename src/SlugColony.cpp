@@ -40,7 +40,7 @@ void SlugColony::createColony(const Coordinates& leafSize)
     }
 }
 
-const std::map<Coordinates, Slug>& SlugColony::getColony() const
+std::map<Coordinates, Slug>& SlugColony::getColony()
 {
     return colony;
 }
@@ -48,4 +48,13 @@ const std::map<Coordinates, Slug>& SlugColony::getColony() const
 const std::shared_ptr<LeafField>& SlugColony::getLeafField() const
 {
     return leafField;
+}
+
+
+void SlugColony::end()
+{
+    for (auto& slug : colony)
+    {
+        slug.second.kill();
+    }
 }

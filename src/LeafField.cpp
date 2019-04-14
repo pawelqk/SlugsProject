@@ -7,7 +7,7 @@ namespace
 }
 
 
-LeafField::LeafField(const std::pair<uint16_t, uint16_t>& sizes)
+LeafField::LeafField(const std::pair<uint16_t, uint16_t>& sizes): work(true)
 {
     leaves.resize(sizes.first);
     for (auto& row : leaves)
@@ -44,7 +44,7 @@ std::thread LeafField::spawnRebuildingThread()
 
 void LeafField::rebuild()
 {
-    while (true)
+    while (work)
     {
         for (auto& row : leaves)
         {
@@ -58,5 +58,10 @@ void LeafField::rebuild()
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(REBUILD_PERIOD));
     }
+}
+
+void LeafField::end()
+{
+    work = false;
 }
 

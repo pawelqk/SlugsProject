@@ -22,10 +22,13 @@ class LeafField
     LeafPtr& updatePosition(const Coordinates& oldCoords, const Coordinates& newCoords);
     std::thread spawnRebuildingThread();
 
+    void end();
+
  private:
     void rebuild();
 
     LeafMatrix leaves;
+    bool work;
 };
 
 #endif
