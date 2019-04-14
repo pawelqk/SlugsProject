@@ -5,6 +5,7 @@
 #include "Slug.h"
 
 #include <cstdint>
+#include <map>
 #include <vector>
 
 
@@ -14,13 +15,12 @@ class SlugColony
     explicit SlugColony(uint16_t size);
     void createColony(const Coordinates& leafSize);
 
-    const std::vector<Slug>& getColony() const;
+    const std::map<Coordinates, Slug>& getColony() const;
     const std::shared_ptr<LeafField>& getLeafField() const;
-    void setColony(const std::vector<Slug>& newColony);
 
  private:
     uint16_t size;
-    std::vector<Slug> colony;
+    std::map<Coordinates, Slug> colony;
     std::shared_ptr<LeafField> leafField;
 };
 

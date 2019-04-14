@@ -25,7 +25,7 @@ class Drawer
  private:
     void refreshScreen();
     void initColoring();
-    uint16_t getColorBasedOnLeafSize(uint16_t leafSize);
+    uint16_t generateColor(uint16_t leafSize);
 
     LeafMatrix leaves;
     uint16_t width;

@@ -30,16 +30,17 @@ void SlugColony::createColony(const Coordinates& leafSize)
             y = rand() % leafSize.second;
         } while (takenX.find(x) != takenX.end() || takenY.find(y) != takenY.end());
 
-        Slug slug(std::make_pair(x, y), leafSize);
+        auto slugCoords = std::make_pair(x, y);
+        Slug slug(slugCoords, leafSize);
         auto leaf = leafField->getLeaf(x, y);
         leaf->setTaken(true);
         slug.setLeaf(leaf);
         slug.setLeafField(leafField);
-        colony.push_back(slug);
+        colony[slugCoords] = slug;
     }
 }
 
-const std::vector<Slug>& SlugColony::getColony() const
+const std::map<Coordinates, Slug>& SlugColony::getColony() const
 {
     return colony;
 }
@@ -48,9 +49,3 @@ const std::shared_ptr<LeafField>& SlugColony::getLeafField() const
 {
     return leafField;
 }
-
-void SlugColony::setColony(const std::vector<Slug>& newColony)
-{
-    colony = newColony;
-}
-

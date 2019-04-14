@@ -31,7 +31,7 @@ int main()
     auto newColony = colony.getColony();
     for (auto& slug : newColony)
     {
-        startingCoords.emplace_back(slug.getLeafCoords());
+        startingCoords.emplace_back(slug.second.getLeafCoords());
     }
 
     auto leafField = colony.getLeafField()->getLeaves();
@@ -40,7 +40,7 @@ int main()
     auto rebuildThread = colony.getLeafField()->spawnRebuildingThread();
     for (auto& slug : newColony)
     {
-        threads.push_back(slug.spawn(mainDrawer));
+        threads.push_back(slug.second.spawn(mainDrawer));
     }
 
     rebuildThread.join();
