@@ -17,7 +17,8 @@ class SlugColony
 
     std::map<Coordinates, Slug>& getColony();
     const std::shared_ptr<LeafField>& getLeafField() const;
-
+    
+    bool checkSlugIllness(Coordinates leafCoords);
     void end();
 
  private:

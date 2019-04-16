@@ -29,6 +29,7 @@ class Slug
     Slug(Coordinates leafCoords, Coordinates limits);
     uint8_t getHealth();
     const Coordinates& getLeafCoords() const;
+    bool getIll();
 
     void setLeaf(const std::shared_ptr<Leaf>& leaf);
     void setLeafField(const std::shared_ptr<LeafField>& leafField);

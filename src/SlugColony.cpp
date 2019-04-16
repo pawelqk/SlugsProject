@@ -50,6 +50,10 @@ const std::shared_ptr<LeafField>& SlugColony::getLeafField() const
     return leafField;
 }
 
+bool SlugColony::checkSlugIllness(Coordinates leafCoords)
+{
+    return colony.find(leafCoords) == colony.end() || colony[leafCoords].getIll();
+}
 
 void SlugColony::end()
 {

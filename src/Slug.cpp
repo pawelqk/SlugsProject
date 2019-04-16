@@ -17,6 +17,11 @@ const Coordinates& Slug::getLeafCoords() const
     return leafCoords;
 }
 
+bool Slug::getIll()
+{
+    return ill;
+}
+
 void Slug::setLeaf(const std::shared_ptr<Leaf>& leaf)
 {
     currentLeaf = leaf;

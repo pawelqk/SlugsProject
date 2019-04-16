@@ -5,19 +5,22 @@
 
 namespace
 {
-    const uint16_t HEALTHY_GREEN = 41;
-    const uint16_t WEAK_GREEN = 44;
-    const uint16_t ILL_LEAF = 13;
-    const uint16_t colorPair = 1;
+    constexpr uint16_t HEALTHY_GREEN = 41;
+    constexpr uint16_t WEAK_GREEN = 44;
+    constexpr uint16_t ILL_LEAF = 13;
+    constexpr uint16_t colorPair = 1;
 }
 
-Drawer::Drawer(uint16_t width, uint16_t height): width(width), height(height), work(true)
+Drawer::Drawer(uint16_t width, uint16_t height,
+        std::shared_ptr<SlugColony>& colony): width(width), height(height),
+    colony(colony), work(true)
 {
     initscr();
     noecho();
     if (has_colors() == FALSE)
     {
-        throw std::runtime_error("Your terminal doesn't support colors. This program will not start");
+        throw std::runtime_error(
+                "Your terminal doesn't support colors. This program will not start");
     }
     initColoring();
 }
@@ -90,25 +93,26 @@ void Drawer::refreshScreen()
             for (auto j = 0u; j < height; j++)
             {
                 move(j, i);
-                // auto color = generateColor(5);
-                // attroff(COLOR_PAIR(1));
-                // attron(COLOR_PAIR(color));
-
+                uint8_t color = 1;
+                attroff(COLOR_PAIR(1));
                 if (leaves[i][j]->getIll())
                 {
-                   attroff(COLOR_PAIR(1));
-                   attron(COLOR_PAIR(4));
+                    color = 4;
                 }
                 else if (leaves[i][j]->getSize() == 0)
                 {
-                    attroff(COLOR_PAIR(1));
-                    attron(COLOR_PAIR(3));
+                    color = 3;
                 }
                 else if (leaves[i][j]->getSize() < 30)
                 {
-                    attroff(COLOR_PAIR(1));
-                    attron(COLOR_PAIR(2));
+                    color = 2;
                 }
+
+                if (colony->checkSlugIllness({i, j}))
+                {
+                    color += 4;
+                }
+                attron(COLOR_PAIR(color));       
 
                 if (leaves[i][j]->getTaken())
                 {
@@ -119,9 +123,7 @@ void Drawer::refreshScreen()
                     printw(" ");
                 }
 
-                attroff(COLOR_PAIR(2));
-                attroff(COLOR_PAIR(3));
-                // attroff(COLOR_PAIR(color));
+                attroff(COLOR_PAIR(color));
                 attron(COLOR_PAIR(1));
             }
         }

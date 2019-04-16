@@ -5,16 +5,18 @@
 
 #include <cstdint>
 #include <curses.h>
+#include <memory>
 #include <utility>
 #include <vector>
 #include <thread>
+
 
 using Coordinates = std::pair<uint16_t, uint16_t>;
 
 class Drawer
 {
  public:
-    Drawer(uint16_t width, uint16_t height);
+    Drawer(uint16_t width, uint16_t height, std::shared_ptr<SlugColony>& colony);
     ~Drawer();
     void drawLeaf();
     void drawColony(const std::vector<Coordinates>& slugPositions);
@@ -31,6 +33,7 @@ class Drawer
     LeafMatrix leaves;
     uint16_t width;
     uint16_t height;
+    std::shared_ptr<SlugColony> colony;
     bool work;
 };
 

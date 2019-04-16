@@ -14,7 +14,7 @@ using LeafPtr = std::shared_ptr<Leaf>;
 class LeafField
 {
  public:
-    explicit LeafField(const std::pair<uint16_t, uint16_t>& sizes);
+    explicit LeafField(const Coordinates& sizes);
 
     const LeafMatrix& getLeaves() const;
     const LeafPtr& getLeaf(uint16_t x, uint16_t y) const;
