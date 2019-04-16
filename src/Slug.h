@@ -5,6 +5,7 @@
 #include "Leaf.h"
 
 #include <cstdint>
+#include <functional>
 #include <memory>
 #include <mutex>
 #include <thread>
@@ -35,11 +36,14 @@ class Slug
     bool getIll();
 
     void setLeaf(const std::shared_ptr<Leaf>& leaf);
+    void setDrawer(const std::shared_ptr<Drawer>& drawer);
     void setLeafField(LeafField* leafField);
 
     Coordinates moveRandomly();
-    std::thread spawn(const std::shared_ptr<Drawer>& drawer);
+    std::thread spawn();
+    std::function<std::thread()> receiveSpawner();
     void kill();
+    std::function<void()> receiveKiller();
  private:
     void live();
     bool moveIsPossible(Move move);

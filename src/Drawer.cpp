@@ -19,7 +19,7 @@ Drawer::Drawer(uint16_t width, uint16_t height, const std::shared_ptr<SlugColony
     if (has_colors() == FALSE)
     {
         throw std::runtime_error(
-                "Your terminal doesn't support colors. This program will not start");
+            "Your terminal doesn't support colors. This program will not start");
     }
     initColoring();
 }
@@ -30,57 +30,22 @@ Drawer::~Drawer()
     endwin();
 }
 
-void Drawer::drawLeaf()
-{
-    attron(COLOR_PAIR(1));
-    for (auto i = 0u; i < height; ++i)
-    {
-        mvhline(i, 0, ' ', width);
-    }
-}
-
-void Drawer::drawColony(const std::vector<Coordinates>& slugPositions)
-{
-    for (auto& position : slugPositions)
-    {
-        move(position.second, position.first);  // TODO: Check why this is inverted
-        printw("x");
-    }
-}
-
-void Drawer::updatePosition(const Coordinates& oldCoords, const Coordinates& newCoords)
-{
-    move(oldCoords.second, oldCoords.first);
-    printw(" ");
-    move(newCoords.second, newCoords.first);
-    printw("x");
-    curs_set(0);
-    refresh();
-}
-
-void Drawer::updateLeaf(const Coordinates& leafPosition, uint8_t leafSize)    // TODO: this method looks bizarre
-{
-    // uint16_t currentColor = colorPair;
-    // uint16_t leafColor = getColorBasedOnLeafSize(leafSize);
-    // attroff(COLOR_PAIR(currentColor));
-    // attron(COLOR_PAIR(leafColor));
-    // move(leafPosition.second, leafPosition.first);
-    // printw("x");
-    // curs_set(0);
-    // refresh();
-    // attroff(COLOR_PAIR(leafColor));
-    // attron(COLOR_PAIR(currentColor));
-}
-
-std::thread Drawer::spawnRefreshingThread(const LeafMatrix& leaves)
+void Drawer::setLeaves(const LeafMatrix& leaves)
 {
     this->leaves = leaves;
+}
+
+std::thread Drawer::spawnRefreshingThread()
+{
     return std::thread([this](){ refreshScreen(); });
 }
 
 void Drawer::end()
 {
     work = false;
+    attroff(COLOR_PAIR(1));
+    refresh();
+    endwin();
 }
 
 void Drawer::refreshScreen()
@@ -92,20 +57,8 @@ void Drawer::refreshScreen()
             for (auto j = 0u; j < height; j++)
             {
                 move(j, i);
-                uint8_t color = 1;
+                uint8_t color = generateColor(leaves[i][j]);
                 attroff(COLOR_PAIR(1));
-                if (leaves[i][j]->getIll())
-                {
-                    color = 4;
-                }
-                else if (leaves[i][j]->getSize() == 0)
-                {
-                    color = 3;
-                }
-                else if (leaves[i][j]->getSize() < 30)
-                {
-                    color = 2;
-                }
 
                 if (colony->checkSlugIllness({i, j}))
                 {
@@ -145,7 +98,25 @@ void Drawer::initColoring()
     attron(COLOR_PAIR(1));
 }
 
-uint16_t Drawer::generateColor(uint16_t leafSize)
+uint16_t Drawer::generateColor(const std::shared_ptr<Leaf>& leaf)
 {
-    return 2;
+    uint16_t color;
+    if (leaf->getIll())
+    {
+        color = 4;
+    }
+    else if (leaf->getSize() == 0)
+    {
+        color = 3;
+    }
+    else if (leaf->getSize() < 30)
+    {
+        color = 2;
+    }
+    else
+    {
+        color = 1;
+    }
+
+    return color;
 }

@@ -1,3 +1,4 @@
+#include "ConcurrencyDispatcher.h"
 #include "Drawer.h"
 #include "SlugColony.h"
 
@@ -5,9 +6,12 @@
 #include <iostream>
 #include <string>
 
-static const uint16_t WIDTH = 100;
-static const uint16_t HEIGHT = 40;
-static const uint16_t COLONY_SIZE = 2;
+namespace
+{
+    constexpr uint16_t WIDTH = 100;
+    constexpr uint16_t HEIGHT = 40;
+    constexpr uint16_t COLONY_SIZE = 2;
+}
 
 int main()
 {
@@ -30,35 +34,25 @@ int main()
     for (auto& slug : newColony)
     {
         startingCoords.emplace_back(slug.second.getLeafCoords());
+        slug.second.setDrawer(mainDrawer);
     }
-
 
     auto leafField = std::make_shared<LeafField>(sizes, colony);
+    mainDrawer->setLeaves(leafField->getLeaves());
 
-    auto drawerThread = mainDrawer->spawnRefreshingThread(leafField->getLeaves());
-    auto rebuildThread = leafField->spawnRebuildingThread();
-    auto waitForEnd = [&]()
-    {
-        while (getch() != ' ') {}
-        colony->end();
-        leafField->end();
-        mainDrawer->end();
-        attroff(COLOR_PAIR(1));
-        refresh();
-        endwin();
-    };
-    auto finishingThread = std::thread(waitForEnd);
+    std::vector<std::function<void()>> onFinishCallbacks{
+        std::bind(&SlugColony::end, colony.get()),
+        std::bind(&LeafField::end, leafField.get()),
+        std::bind(&Drawer::end, mainDrawer.get())};
+    std::vector<std::function<std::thread()>> threadSpawners{
+        std::bind(&Drawer::spawnRefreshingThread, mainDrawer),
+        std::bind(&LeafField::spawnRebuildingThread, leafField)};
     for (auto& slug : newColony)
     {
-        threads.push_back(slug.second.spawn(mainDrawer));
+        onFinishCallbacks.push_back(slug.second.receiveKiller());
+        threadSpawners.push_back(slug.second.receiveSpawner());
     }
 
-
-    rebuildThread.join();
-    drawerThread.join();
-    finishingThread.join();
-    for (auto& thread : threads)
-    {
-        thread.join();
-    }
+    ConcurrencyDispatcher concurrencyDispatcher{onFinishCallbacks};
+    concurrencyDispatcher.beginExecuting(threadSpawners);
 }

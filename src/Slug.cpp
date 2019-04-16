@@ -27,6 +27,11 @@ void Slug::setLeaf(const std::shared_ptr<Leaf>& leaf)
     currentLeaf = leaf;
 }
 
+void Slug::setDrawer(const std::shared_ptr<Drawer>& drawer)
+{
+    this->drawer = drawer;
+}
+
 void Slug::setLeafField(LeafField* leafField)
 {
     this->leafField = leafField;
@@ -49,16 +54,26 @@ Coordinates Slug::moveRandomly()  // TODO: better!!!
     return oldCoords;
 }
 
-std::thread Slug::spawn(const std::shared_ptr<Drawer>& drawer)
+std::thread Slug::spawn()
 {
-    this->drawer = drawer;
     return std::thread([this]{ live(); });
 }
+
+std::function<std::thread()> Slug::receiveSpawner()
+{
+    return [this](){ return spawn(); };
+}
+
 
 void Slug::kill()
 {
     leafField->getLeaf(leafCoords.first, leafCoords.second)->setTaken(false);
     dead = true;
+}
+
+std::function<void()> Slug::receiveKiller()
+{
+    return [this](){ kill(); };
 }
 
 void Slug::live()
