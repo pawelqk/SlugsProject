@@ -1,30 +1,31 @@
 #ifndef __SLUG_COLONY_H__
 #define __SLUG_COLONY_H__
 
-#include "LeafField.h"
 #include "Slug.h"
 
 #include <cstdint>
 #include <map>
 #include <vector>
 
+class Slug;
+
+using Coordinates = std::pair<uint16_t, uint16_t>;
 
 class SlugColony
 {
  public:
-    explicit SlugColony(uint16_t size);
-    void createColony(const Coordinates& leafSize);
+    SlugColony(uint16_t size, const Coordinates& leafSize);
 
     std::map<Coordinates, Slug>& getColony();
-    const std::shared_ptr<LeafField>& getLeafField() const;
-    
+
     bool checkSlugIllness(Coordinates leafCoords);
     void end();
 
  private:
+    void createColony(const Coordinates& leafSize);
+
     uint16_t size;
     std::map<Coordinates, Slug> colony;
-    std::shared_ptr<LeafField> leafField;
 };
 
 #endif

@@ -4,7 +4,7 @@
 #include <random>
 
 Slug::Slug(Coordinates leafCoords, Coordinates limits):
-leafCoords(leafCoords), limits(limits), dead(false), ill(false)
+health(100u), leafCoords(leafCoords), limits(limits), dead(false), ill(false)
 {}
 
 uint8_t Slug::getHealth()
@@ -27,7 +27,7 @@ void Slug::setLeaf(const std::shared_ptr<Leaf>& leaf)
     currentLeaf = leaf;
 }
 
-void Slug::setLeafField(const std::shared_ptr<LeafField>& leafField)
+void Slug::setLeafField(LeafField* leafField)
 {
     this->leafField = leafField;
 }
@@ -57,6 +57,7 @@ std::thread Slug::spawn(const std::shared_ptr<Drawer>& drawer)
 
 void Slug::kill()
 {
+    leafField->getLeaf(leafCoords.first, leafCoords.second)->setTaken(false);
     dead = true;
 }
 
@@ -82,6 +83,15 @@ void Slug::live()
 
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
+        if (ill)
+        {
+            --health;
+        }
+
+        if (health == 0)
+        {
+            kill();
+        }
     }
 }
 
@@ -90,13 +100,17 @@ bool Slug::moveIsPossible(Move move)
     switch (move)
     {
     case UP:
-        return leafCoords.second > 0 && !leafField->getLeaf(leafCoords.first, leafCoords.second - 1)->getTaken();
+        return leafCoords.second > 0
+           &&  !leafField->getLeaf(leafCoords.first, leafCoords.second - 1)->getTaken();
     case DOWN:
-        return leafCoords.second < limits.second - 1 && !leafField->getLeaf(leafCoords.first, leafCoords.second + 1)->getTaken();
+        return leafCoords.second < limits.second - 1
+            && !leafField->getLeaf(leafCoords.first, leafCoords.second + 1)->getTaken();
     case LEFT:
-        return leafCoords.first > 0 && !leafField->getLeaf(leafCoords.first - 1, leafCoords.second)->getTaken();
+        return leafCoords.first > 0
+            && !leafField->getLeaf(leafCoords.first - 1, leafCoords.second)->getTaken();
     case RIGHT:
-        return leafCoords.first < limits.first - 1 && !leafField->getLeaf(leafCoords.first + 1, leafCoords.second)->getTaken();
+        return leafCoords.first < limits.first - 1
+            && !leafField->getLeaf(leafCoords.first + 1, leafCoords.second)->getTaken();
     default:
         // TODO: log here!
         return false;

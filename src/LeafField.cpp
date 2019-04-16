@@ -7,7 +7,7 @@ namespace
 }
 
 
-LeafField::LeafField(const std::pair<uint16_t, uint16_t>& sizes): work(true)
+LeafField::LeafField(const Coordinates& sizes, const SlugColonyPtr& colony): work(true)
 {
     leaves.resize(sizes.first);
     for (auto& row : leaves)
@@ -17,6 +17,16 @@ LeafField::LeafField(const std::pair<uint16_t, uint16_t>& sizes): work(true)
         {
             leaf = std::make_shared<Leaf>();
         }
+    }
+
+    for (auto& slug : colony->getColony())
+    {
+        auto& slugCoords = slug.first;
+        auto& leaf = leaves[slugCoords.first][slugCoords.second];
+
+        leaf->setTaken(true);
+        slug.second.setLeaf(leaf);
+        slug.second.setLeafField(this);
     }
 }
 

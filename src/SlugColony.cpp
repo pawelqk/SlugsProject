@@ -4,12 +4,13 @@
 #include <random>
 #include <set>
 
-SlugColony::SlugColony(uint16_t size): size(size)
-{}
+SlugColony::SlugColony(uint16_t size, const Coordinates& leafSize): size(size)
+{
+    createColony(leafSize);
+}
 
 void SlugColony::createColony(const Coordinates& leafSize)
 {
-    leafField = std::make_shared<LeafField>(leafSize);
     // TODO: mb extract random instance
     // std::random_device dev;
     // std::mt19937 rng(dev());
@@ -32,10 +33,6 @@ void SlugColony::createColony(const Coordinates& leafSize)
 
         auto slugCoords = std::make_pair(x, y);
         Slug slug(slugCoords, leafSize);
-        auto leaf = leafField->getLeaf(x, y);
-        leaf->setTaken(true);
-        slug.setLeaf(leaf);
-        slug.setLeafField(leafField);
         colony[slugCoords] = slug;
     }
 }
@@ -43,11 +40,6 @@ void SlugColony::createColony(const Coordinates& leafSize)
 std::map<Coordinates, Slug>& SlugColony::getColony()
 {
     return colony;
-}
-
-const std::shared_ptr<LeafField>& SlugColony::getLeafField() const
-{
-    return leafField;
 }
 
 bool SlugColony::checkSlugIllness(Coordinates leafCoords)

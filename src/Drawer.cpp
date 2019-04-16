@@ -11,9 +11,8 @@ namespace
     constexpr uint16_t colorPair = 1;
 }
 
-Drawer::Drawer(uint16_t width, uint16_t height,
-        std::shared_ptr<SlugColony>& colony): width(width), height(height),
-    colony(colony), work(true)
+Drawer::Drawer(uint16_t width, uint16_t height, const std::shared_ptr<SlugColony>& colony):
+    width(width), height(height), colony(colony), work(true)
 {
     initscr();
     noecho();
@@ -112,7 +111,7 @@ void Drawer::refreshScreen()
                 {
                     color += 4;
                 }
-                attron(COLOR_PAIR(color));       
+                attron(COLOR_PAIR(color));
 
                 if (leaves[i][j]->getTaken())
                 {

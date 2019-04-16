@@ -12,9 +12,8 @@ static const uint16_t COLONY_SIZE = 2;
 int main()
 {
     std::vector<std::thread> threads;
-    auto colony = std::make_shared<SlugColony>(COLONY_SIZE);
     Coordinates sizes{WIDTH, HEIGHT};
-    colony->createColony(sizes);
+    auto colony = std::make_shared<SlugColony>(COLONY_SIZE, sizes);
     std::shared_ptr<Drawer> mainDrawer;
     try
     {
@@ -34,13 +33,13 @@ int main()
     }
 
 
-    auto leafField = colony->getLeafField();
+    auto leafField = std::make_shared<LeafField>(sizes, colony);
 
     auto drawerThread = mainDrawer->spawnRefreshingThread(leafField->getLeaves());
     auto rebuildThread = leafField->spawnRebuildingThread();
     auto waitForEnd = [&]()
     {
-        while (getch() != ' ');
+        while (getch() != ' ') {}
         colony->end();
         leafField->end();
         mainDrawer->end();

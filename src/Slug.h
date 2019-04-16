@@ -9,6 +9,9 @@
 #include <mutex>
 #include <thread>
 
+class LeafField;
+class Drawer;
+
 using Coordinates = std::pair<uint16_t, uint16_t>;
 
 static std::mutex movingLock;
@@ -32,7 +35,7 @@ class Slug
     bool getIll();
 
     void setLeaf(const std::shared_ptr<Leaf>& leaf);
-    void setLeafField(const std::shared_ptr<LeafField>& leafField);
+    void setLeafField(LeafField* leafField);
 
     Coordinates moveRandomly();
     std::thread spawn(const std::shared_ptr<Drawer>& drawer);
@@ -50,7 +53,7 @@ class Slug
 
     std::shared_ptr<Leaf> currentLeaf;
     std::shared_ptr<Drawer> drawer;
-    std::shared_ptr<LeafField> leafField;
+    LeafField* leafField;
 };
 
 #endif

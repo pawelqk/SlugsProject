@@ -2,19 +2,23 @@
 #define __LEAF_FIELD_H__
 
 #include "Leaf.h"
+#include "SlugColony.h"
 
 #include <memory>
 #include <thread>
 #include <vector>
 
+class SlugColony;
+
 using Coordinates = std::pair<uint16_t, uint16_t>;
 using LeafMatrix = std::vector<std::vector<std::shared_ptr<Leaf>>>;
 using LeafPtr = std::shared_ptr<Leaf>;
+using SlugColonyPtr = std::shared_ptr<SlugColony>;
 
 class LeafField
 {
  public:
-    explicit LeafField(const Coordinates& sizes);
+    LeafField(const Coordinates& leafSize, const SlugColonyPtr& colony);
 
     const LeafMatrix& getLeaves() const;
     const LeafPtr& getLeaf(uint16_t x, uint16_t y) const;
