@@ -44,7 +44,7 @@ std::map<Coordinates, Slug>& SlugColony::getColony()
 
 bool SlugColony::checkSlugIllness(Coordinates leafCoords)
 {
-    return colony.find(leafCoords) == colony.end() || colony[leafCoords].getIll();
+    return colony.find(leafCoords) != colony.end() && colony[leafCoords].getIll();
 }
 
 void SlugColony::end()
