@@ -8,7 +8,6 @@ namespace
     constexpr uint16_t HEALTHY_GREEN = 41;
     constexpr uint16_t WEAK_GREEN = 44;
     constexpr uint16_t ILL_LEAF = 13;
-    constexpr uint16_t colorPair = 1;
 }
 
 Drawer::Drawer(uint16_t width, uint16_t height, const std::shared_ptr<SlugColony>& colony):
@@ -26,8 +25,7 @@ Drawer::Drawer(uint16_t width, uint16_t height, const std::shared_ptr<SlugColony
 
 Drawer::~Drawer()
 {
-    attroff(COLOR_PAIR(colorPair));
-    endwin();
+    end();
 }
 
 void Drawer::setLeaves(const LeafMatrix& leaves)

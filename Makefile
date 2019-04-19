@@ -2,7 +2,7 @@ FLAGS = -std=c++17 -c -Wall -Werror
 DEPS = -lncurses -lpthread
 OBJ = bin/src/Drawer.o bin/src/Leaf.o bin/src/Slug.o bin/src/SlugColony.o bin/src/LeafField.o bin/src/ConcurrencyDispatcher.o
 MAIN_OBJ = bin/src/main.o
-TEST_OBJ = bin/test/utMain.o bin/test/SlugTest.o
+TEST_OBJ = bin/test/utMain.o bin/test/SlugTest.o bin/test/DrawerTest.o
 
 .PHONY:
 	clean
@@ -13,13 +13,13 @@ all: directory $(OBJ) $(MAIN_OBJ)
 	g++ -o bin/Slugs $(MAIN_OBJ) $(OBJ) $(DEPS)
 
 ut: directory $(OBJ) $(TEST_OBJ)
-	g++ -o bin/TestSlugs $(TEST_OBJ) $(OBJ) $(DEPS) -lgtest
+	g++ -o bin/TestSlugs $(TEST_OBJ) $(OBJ) $(DEPS) -lgtest -lgmock -lgtest_main -lgmock_main
 
 bin/src/%.o: src/%.cpp
 	g++ -g $(FLAGS) -o $@ $^
 
 bin/test/%.o: test/%.cpp
-	g++ -o $@ $^ $(FLAGS)
+	g++ -o $@ $^ $(FLAGS) 
 
 lint:
 	cpplint src/* test/*

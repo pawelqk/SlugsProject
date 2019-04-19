@@ -15,10 +15,11 @@ class SlugColony
 {
  public:
     SlugColony(uint16_t size, const Coordinates& leafSize);
+    virtual ~SlugColony() = default;
 
     std::map<Coordinates, Slug>& getColony();
 
-    bool checkSlugIllness(Coordinates leafCoords);
+    virtual bool checkSlugIllness(Coordinates leafCoords);
     void end();
 
  private:
