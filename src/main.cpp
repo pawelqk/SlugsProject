@@ -15,7 +15,6 @@ namespace
 
 int main()
 {
-    std::vector<std::thread> threads;
     Coordinates sizes{WIDTH, HEIGHT};
     auto colony = std::make_shared<SlugColony>(COLONY_SIZE, sizes);
     std::shared_ptr<Drawer> mainDrawer;

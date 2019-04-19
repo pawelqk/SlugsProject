@@ -48,7 +48,7 @@ Coordinates Slug::moveRandomly()  // TODO: better!!!
     Move move = static_cast<Move>(rand() % 4 + 1);
     if (moveIsPossible(move))
     {
-        changePlace(move);
+        leafCoords = changePlace(move, leafCoords);
     }
 
     return oldCoords;
@@ -100,12 +100,28 @@ void Slug::live()
         }
         if (ill)
         {
-            --health;
-        }
-
-        if (health == 0)
-        {
-            kill();
+            if (--health == 0)
+            {
+                kill();
+            }
+            else
+            {
+                Move moveToNeighbour = tryToMoveToReachSlug();
+                if (moveToNeighbour == NONE)
+                {
+                    movingLock.lock();
+                    auto oldCoords = moveRandomly();
+                    currentLeaf = leafField->updatePosition(oldCoords, leafCoords);
+                    movingLock.unlock();
+                }
+                else
+                {
+                    movingLock.lock();
+                    eatSlug(moveToNeighbour);
+                    movingLock.unlock();
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            }
         }
     }
 }
@@ -132,8 +148,9 @@ bool Slug::moveIsPossible(Move move)
     }
 }
 
-void Slug::changePlace(Move move)
+Coordinates Slug::changePlace(Move move, Coordinates& currentCoords)
 {
+    auto leafCoords = currentCoords;
     switch (move)
     {
     case UP:
@@ -149,5 +166,17 @@ void Slug::changePlace(Move move)
         leafCoords.first++;
         break;
     }
+
+    return leafCoords;
+}
+
+Move Slug::tryToMoveToReachSlug()
+{
+    
+}
+
+void Slug::eatSlug(Move moveToNeighbour)
+{
+
 }
 

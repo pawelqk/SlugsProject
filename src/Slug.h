@@ -23,7 +23,8 @@ class Slug
  public:
     enum Move: uint8_t
     {
-        UP = 1,
+        NONE = 0,
+        UP,
         DOWN,
         LEFT,
         RIGHT
@@ -47,7 +48,9 @@ class Slug
  private:
     void live();
     bool moveIsPossible(Move move);
-    void changePlace(Move move);
+    Coordinates changePlace(Move move, Coordinates& currentCoords);
+    Move tryToMoveToReachSlug();
+    void eatSlug(Move moveToNeighbour);
 
     uint8_t health;
     Coordinates leafCoords;
