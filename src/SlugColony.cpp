@@ -1,5 +1,6 @@
 #include "SlugColony.h"
 
+#include <algorithm>
 #include <iostream>
 #include <random>
 #include <set>
@@ -32,7 +33,7 @@ void SlugColony::createColony(const Coordinates& leafSize)
         } while (takenX.find(x) != takenX.end() || takenY.find(y) != takenY.end());
 
         auto slugCoords = std::make_pair(x, y);
-        Slug slug(slugCoords, leafSize);
+        Slug slug(slugCoords, leafSize, this);
         colony[slugCoords] = slug;
     }
 }
@@ -53,4 +54,20 @@ void SlugColony::end()
     {
         slug.second.kill();
     }
+}
+
+void SlugColony::killSlug(const Coordinates& slugCoords)
+{
+    auto it = std::find_if(colony.begin(), colony.end(),
+        [&slugCoords](auto slug){ return slug.second.getLeafCoords() == slugCoords; });
+
+    if (it == colony.end())
+    {
+        std::cout << "SOMETHING's WRONG IN " << __func__;
+        return;
+    }
+
+    it->second.kill();
+    colony.erase(it);
+    std::cout << "slug erased!";
 }

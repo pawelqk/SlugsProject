@@ -21,6 +21,8 @@ class SlugColony
     bool checkSlugIllness(Coordinates leafCoords);
     void end();
 
+    void killSlug(const Coordinates& slugCoords);
+
  private:
     void createColony(const Coordinates& leafSize);
 
