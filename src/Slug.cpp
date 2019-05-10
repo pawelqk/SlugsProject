@@ -3,8 +3,8 @@
 #include <iostream>
 #include <random>
 
-Slug::Slug(Coordinates leafCoords, Coordinates limits):
-health(100u), leafCoords(leafCoords), limits(limits), dead(false), ill(false)
+Slug::Slug(Coordinates leafCoords, Coordinates limits, SlugColony* colony):
+health(100u), leafCoords(leafCoords), limits(limits), colony(colony), dead(false), ill(false)
 {}
 
 uint8_t Slug::getHealth()
@@ -67,7 +67,7 @@ std::function<std::thread()> Slug::receiveSpawner()
 
 void Slug::kill()
 {
-    leafField->getLeaf(leafCoords.first, leafCoords.second)->setTaken(false);
+    currentLeaf->setTaken(false);
     dead = true;
 }
 
@@ -148,7 +148,7 @@ bool Slug::moveIsPossible(Move move)
     }
 }
 
-Coordinates Slug::changePlace(Move move, Coordinates& currentCoords)
+Coordinates Slug::changePlace(Move move, const Coordinates& currentCoords)
 {
     auto leafCoords = currentCoords;
     switch (move)
@@ -165,18 +165,63 @@ Coordinates Slug::changePlace(Move move, Coordinates& currentCoords)
     case RIGHT:
         leafCoords.first++;
         break;
+    default:
+        break;
     }
 
     return leafCoords;
 }
 
-Move Slug::tryToMoveToReachSlug()
+Slug::Move Slug::tryToMoveToReachSlug()
 {
+    for (auto& moveToLeaf : getMovesToNeighbourLeaves())
+    {
+        if (moveToLeaf.second->getTaken())
+        {
+            return moveToLeaf.first;
+        }
+    }
+
+    return NONE;
+}
+
+std::map<Slug::Move, std::shared_ptr<Leaf>> Slug::getMovesToNeighbourLeaves()
+{
+    std::map<Move, std::shared_ptr<Leaf>> movesToNeighbours;
     
+    if (leafCoords.second > 0 && leafField->getLeaf(leafCoords.first, leafCoords.second - 1)->getTaken())
+    {
+        movesToNeighbours[UP] = leafField->getLeaf(
+                leafCoords.first, leafCoords.second - 1);
+    }
+    if (leafCoords.second < limits.second - 1
+            && leafField->getLeaf(leafCoords.first, leafCoords.second + 1)->getTaken())
+    {
+        movesToNeighbours[DOWN] = leafField->getLeaf(
+                leafCoords.first, leafCoords.second + 1);
+    }
+    
+    if (leafCoords.first > 0
+            && leafField->getLeaf(leafCoords.first - 1, leafCoords.second)->getTaken())
+    {
+        movesToNeighbours[LEFT] = leafField->getLeaf(
+                leafCoords.first - 1, leafCoords.second);
+    }
+    if (leafCoords.first < limits.first - 1
+            && leafField->getLeaf(leafCoords.first + 1, leafCoords.second)->getTaken())
+    {
+        movesToNeighbours[RIGHT] = leafField->getLeaf(
+                leafCoords.first + 1, leafCoords.second);
+    }
+    
+    return movesToNeighbours;
 }
 
 void Slug::eatSlug(Move moveToNeighbour)
-{
-
+{   
+    auto newCoords = changePlace(moveToNeighbour, leafCoords);
+    colony->killSlug(newCoords);
+    currentLeaf = leafField->updatePosition(leafCoords, newCoords);
+    leafCoords = newCoords;
 }
 

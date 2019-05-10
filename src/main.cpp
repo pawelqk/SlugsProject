@@ -10,7 +10,7 @@ namespace
 {
     constexpr uint16_t WIDTH = 100;
     constexpr uint16_t HEIGHT = 40;
-    constexpr uint16_t COLONY_SIZE = 2;
+    constexpr uint16_t COLONY_SIZE = 30;
 }
 
 int main()

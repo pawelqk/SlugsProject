@@ -3,15 +3,18 @@
 
 #include "Drawer.h"
 #include "Leaf.h"
+#include "SlugColony.h"
 
 #include <cstdint>
 #include <functional>
+#include <map>
 #include <memory>
 #include <mutex>
 #include <thread>
 
 class LeafField;
 class Drawer;
+class SlugColony;
 
 using Coordinates = std::pair<uint16_t, uint16_t>;
 
@@ -31,7 +34,7 @@ class Slug
     };
 
     Slug() = default;
-    Slug(Coordinates leafCoords, Coordinates limits);
+    Slug(Coordinates leafCoords, Coordinates limits, SlugColony* colony);
     uint8_t getHealth();
     const Coordinates& getLeafCoords() const;
     bool getIll();
@@ -48,13 +51,15 @@ class Slug
  private:
     void live();
     bool moveIsPossible(Move move);
-    Coordinates changePlace(Move move, Coordinates& currentCoords);
+    Coordinates changePlace(Move move, const Coordinates& currentCoords);
     Move tryToMoveToReachSlug();
+    std::map<Move, std::shared_ptr<Leaf>> getMovesToNeighbourLeaves();
     void eatSlug(Move moveToNeighbour);
 
     uint8_t health;
     Coordinates leafCoords;
     Coordinates limits;
+    SlugColony* colony;
     bool dead;
     bool ill;
 
