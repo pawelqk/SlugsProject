@@ -1,5 +1,6 @@
 #include "SlugColony.h"
 
+#include <algorithm>
 #include <iostream>
 #include <random>
 #include <set>
@@ -57,7 +58,8 @@ void SlugColony::end()
 
 void SlugColony::killSlug(const Coordinates& slugCoords)
 {
-    auto it = colony.find(slugCoords);
+    auto it = std::find_if(colony.begin(), colony.end(),
+        [&slugCoords](auto slug){ return slug.second.getLeafCoords() == slugCoords; });
 
     if (it == colony.end())
     {
@@ -65,7 +67,7 @@ void SlugColony::killSlug(const Coordinates& slugCoords)
         return;
     }
 
-    colony[slugCoords].kill();
+    it->second.kill();
     colony.erase(it);
     std::cout << "slug erased!";
 }
