@@ -13,7 +13,7 @@ all: directory $(OBJ) $(MAIN_OBJ)
 	g++ -o bin/Slugs $(MAIN_OBJ) $(OBJ) $(DEPS)
 
 ut: directory $(OBJ) $(TEST_OBJ)
-	g++ -o bin/TestSlugs $(TEST_OBJ) $(OBJ) $(DEPS) -lgtest
+	g++ -o bin/TestSlugs $(TEST_OBJ) $(OBJ) $(DEPS) -lgtest -lgmock
 
 bin/src/%.o: src/%.cpp
 	g++ -g $(FLAGS) -o $@ $^
