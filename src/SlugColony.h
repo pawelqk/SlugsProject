@@ -5,7 +5,11 @@
 
 #include <cstdint>
 #include <map>
+#include <memory>
 #include <vector>
+#include <thread>
+
+#include "ConcurrencyDispatcher.h"
 
 class Slug;
 
@@ -15,20 +19,24 @@ class SlugColony
 {
  public:
     SlugColony(uint16_t size, const Coordinates& leafSize);
+    void createColony(const Coordinates& leafSize);
 
     std::map<Coordinates, Slug>& getColony();
 
     bool checkSlugIllness(Coordinates leafCoords);
+    void start(const std::shared_ptr<ConcurrencyDispatcher>& dispatcher,
+        const std::vector<std::function<std::thread()>>& threadSpawners);
+
     void end();
 
     void killSlug(const Coordinates& slugCoords);
-    void createNewSlug(const Coordinates& coords);
+    void createNewSlug(const Slug& slug);
 
  private:
-    void createColony(const Coordinates& leafSize);
-
     uint16_t size;
     std::map<Coordinates, Slug> colony;
+
+    std::shared_ptr<ConcurrencyDispatcher> dispatcher;
 };
 
 #endif

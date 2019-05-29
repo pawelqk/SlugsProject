@@ -42,3 +42,11 @@ void ConcurrencyDispatcher::waitForKey()
         callback();
     }
 }
+
+void ConcurrencyDispatcher::createNew(const std::function<std::thread()> spawner,
+    const std::function<void()> killer)
+{
+    onFinishCallbacks.push_back(killer);
+    auto thread = spawner();
+    thread.detach();
+}

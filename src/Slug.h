@@ -53,8 +53,10 @@ class Slug
     bool moveIsPossible(Move move);
     Coordinates changePlace(Move move, const Coordinates& currentCoords);
     Move tryToMoveToReachSlug();
+    Move tryToMoveFreeLeaf();
     std::map<Move, std::shared_ptr<Leaf>> getMovesToNeighbourLeaves();
     void eatSlug(Move moveToNeighbour);
+    void createSlug(Move moveToNeighbour);
 
     uint8_t health;
     Coordinates leafCoords;

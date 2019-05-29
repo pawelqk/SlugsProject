@@ -25,6 +25,10 @@ bool Slug::getIll()
 void Slug::setLeaf(const std::shared_ptr<Leaf>& leaf)
 {
     currentLeaf = leaf;
+    if (!currentLeaf)
+    {
+        throw std::exception();
+    }
 }
 
 void Slug::setDrawer(const std::shared_ptr<Drawer>& drawer)
@@ -94,12 +98,16 @@ void Slug::live()
             movingLock.lock();
             auto oldCoords = moveRandomly();
             currentLeaf = leafField->updatePosition(oldCoords, leafCoords);
-            if (currentLeaf->getEgg() && rand() % 5 == 0)
+            if (currentLeaf->getEgg() && (rand() % 5 == 0))
             {
-                colony->createNewSlug(leafCoords);
+                Move moveToNeighbour = tryToMoveFreeLeaf();
+                if (moveToNeighbour != NONE)
+                {
+                    createSlug(moveToNeighbour);
+                }
                 currentLeaf->setEgg(false);
             }
-            else if (!currentLeaf->getEgg() && rand() % 5 == 0)
+            else if (!(currentLeaf->getEgg()) && (rand() % 5 == 0))
             {
                 currentLeaf->setEgg(true);
             }
@@ -196,30 +204,40 @@ Slug::Move Slug::tryToMoveToReachSlug()
     return NONE;
 }
 
+Slug::Move Slug::tryToMoveFreeLeaf()
+{
+    for (auto& moveToLeaf : getMovesToNeighbourLeaves())
+    {
+        if (!moveToLeaf.second->getTaken())
+        {
+            return moveToLeaf.first;
+        }
+    }
+
+    return NONE;
+}
+
 std::map<Slug::Move, std::shared_ptr<Leaf>> Slug::getMovesToNeighbourLeaves()
 {
     std::map<Move, std::shared_ptr<Leaf>> movesToNeighbours;
     
-    if (leafCoords.second > 0 && leafField->getLeaf(leafCoords.first, leafCoords.second - 1)->getTaken())
+    if (leafCoords.second > 0)
     {
         movesToNeighbours[UP] = leafField->getLeaf(
                 leafCoords.first, leafCoords.second - 1);
     }
-    if (leafCoords.second < limits.second - 1
-            && leafField->getLeaf(leafCoords.first, leafCoords.second + 1)->getTaken())
+    if (leafCoords.second < limits.second - 1)
     {
         movesToNeighbours[DOWN] = leafField->getLeaf(
                 leafCoords.first, leafCoords.second + 1);
     }
     
-    if (leafCoords.first > 0
-            && leafField->getLeaf(leafCoords.first - 1, leafCoords.second)->getTaken())
+    if (leafCoords.first > 0)
     {
         movesToNeighbours[LEFT] = leafField->getLeaf(
                 leafCoords.first - 1, leafCoords.second);
     }
-    if (leafCoords.first < limits.first - 1
-            && leafField->getLeaf(leafCoords.first + 1, leafCoords.second)->getTaken())
+    if (leafCoords.first < limits.first - 1)
     {
         movesToNeighbours[RIGHT] = leafField->getLeaf(
                 leafCoords.first + 1, leafCoords.second);
@@ -234,5 +252,17 @@ void Slug::eatSlug(Move moveToNeighbour)
     colony->killSlug(newCoords);
     currentLeaf = leafField->updatePosition(leafCoords, newCoords);
     leafCoords = newCoords;
+}
+
+void Slug::createSlug(Move moveToNeighbour)
+{
+    auto newCoords = changePlace(moveToNeighbour, leafCoords);
+    const auto& newSlugsLeaf = leafField->getLeaf(newCoords.first, newCoords.second);
+    Slug newSlug(newCoords, limits, colony);
+    newSlug.setLeaf(newSlugsLeaf);
+    newSlug.setLeafField(leafField);
+    newSlugsLeaf->setTaken(true);
+
+    colony->createNewSlug(newSlug);
 }
 

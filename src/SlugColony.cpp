@@ -1,5 +1,4 @@
-#include "SlugColony.h"
-
+#include "SlugColony.h" 
 #include <algorithm>
 #include <iostream>
 #include <random>
@@ -51,6 +50,13 @@ bool SlugColony::checkSlugIllness(Coordinates leafCoords)
     return (it != colony.end()) && it->second.getIll();
 }
 
+void SlugColony::start(const std::shared_ptr<ConcurrencyDispatcher>& dispatcher,
+    const std::vector<std::function<std::thread()>>& threadSpawners)
+{
+    this->dispatcher = dispatcher;
+    dispatcher->beginExecuting(threadSpawners);
+}
+
 void SlugColony::end()
 {
     for (auto& slug : colony)
@@ -66,7 +72,6 @@ void SlugColony::killSlug(const Coordinates& slugCoords)
 
     if (it == colony.end())
     {
-        std::cout << "SOMETHING's WRONG IN " << __func__;
         return;
     }
 
@@ -74,7 +79,9 @@ void SlugColony::killSlug(const Coordinates& slugCoords)
     colony.erase(it);
 }
 
-void SlugColony::createNewSlug(const Coordinates& slugCoords)
+void SlugColony::createNewSlug(const Slug& slug)
 {
-    
+    colony[slug.getLeafCoords()] = slug;
+    dispatcher->createNew(colony[slug.getLeafCoords()].receiveSpawner(),
+        colony[slug.getLeafCoords()].receiveKiller());
 }

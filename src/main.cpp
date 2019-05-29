@@ -53,6 +53,6 @@ int main()
         threadSpawners.push_back(slug.second.receiveSpawner());
     }
 
-    ConcurrencyDispatcher concurrencyDispatcher{onFinishCallbacks};
-    concurrencyDispatcher.beginExecuting(threadSpawners);
+    auto dispatcher = std::make_shared<ConcurrencyDispatcher>(onFinishCallbacks);
+    colony->start(dispatcher, threadSpawners);
 }

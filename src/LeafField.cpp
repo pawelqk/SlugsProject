@@ -44,6 +44,7 @@ LeafPtr& LeafField::updatePosition(const Coordinates& oldCoords, const Coordinat
 {
     leaves[oldCoords.first][oldCoords.second]->setTaken(false);
     leaves[newCoords.first][newCoords.second]->setTaken(true);
+    
     return leaves[newCoords.first][newCoords.second];
 }
 
