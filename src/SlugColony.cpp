@@ -45,7 +45,10 @@ std::map<Coordinates, Slug>& SlugColony::getColony()
 
 bool SlugColony::checkSlugIllness(Coordinates leafCoords)
 {
-    return colony.find(leafCoords) != colony.end() && colony[leafCoords].getIll();
+    auto it = std::find_if(colony.begin(), colony.end(),
+        [&leafCoords](auto slug){ return slug.second.getLeafCoords() == leafCoords; });
+
+    return (it != colony.end()) && it->second.getIll();
 }
 
 void SlugColony::end()
@@ -69,5 +72,9 @@ void SlugColony::killSlug(const Coordinates& slugCoords)
 
     it->second.kill();
     colony.erase(it);
-    std::cout << "slug erased!";
+}
+
+void SlugColony::createNewSlug(const Coordinates& slugCoords)
+{
+    
 }

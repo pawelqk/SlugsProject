@@ -22,6 +22,7 @@ class SlugColony
     void end();
 
     void killSlug(const Coordinates& slugCoords);
+    void createNewSlug(const Coordinates& coords);
 
  private:
     void createColony(const Coordinates& leafSize);

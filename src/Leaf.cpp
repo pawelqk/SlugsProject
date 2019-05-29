@@ -23,9 +23,19 @@ bool Leaf::getIll()
     return ill;
 }
 
+bool Leaf::getEgg()
+{
+    return egg;
+}
+
 void Leaf::setTaken(bool taken)
 {
     this->taken = taken;
+}
+
+void Leaf::setEgg(bool egg)
+{
+    this->egg = egg;
 }
 
 void Leaf::regenerate()

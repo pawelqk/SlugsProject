@@ -24,6 +24,7 @@ class LeafField
     const LeafPtr& getLeaf(uint16_t x, uint16_t y) const;
 
     LeafPtr& updatePosition(const Coordinates& oldCoords, const Coordinates& newCoords);
+    void leaveEgg();
     std::thread spawnRebuildingThread();
 
     void end();

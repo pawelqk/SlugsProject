@@ -58,17 +58,23 @@ void Drawer::refreshScreen()
             {
                 move(j, i);
                 uint8_t color = generateColor(leaves[i][j]);
+
                 attroff(COLOR_PAIR(1));
+                attron(COLOR_PAIR(color));
 
                 if (colony->checkSlugIllness({i, j}))
                 {
                     color += 4;
                 }
-                attron(COLOR_PAIR(color));
 
+                attron(COLOR_PAIR(color));
                 if (leaves[i][j]->getTaken())
                 {
                     printw("x");
+                }
+                else if (leaves[i][j]->getEgg())
+                {
+                    printw("0");
                 }
                 else
                 {
@@ -87,14 +93,18 @@ void Drawer::refreshScreen()
 void Drawer::initColoring()
 {
     start_color();
-    init_pair(1, COLOR_BLACK, HEALTHY_GREEN);
-    init_pair(2, COLOR_BLACK, WEAK_GREEN);
-    init_pair(3, COLOR_BLACK, COLOR_BLACK);
-    init_pair(4, COLOR_BLACK, ILL_LEAF);
-    init_pair(5, COLOR_RED, HEALTHY_GREEN);
-    init_pair(6, COLOR_RED, WEAK_GREEN);
-    init_pair(7, COLOR_RED, COLOR_BLACK);
-    init_pair(8, COLOR_RED, ILL_LEAF);
+    init_pair(1, COLOR_YELLOW, HEALTHY_GREEN);
+    init_pair(2, COLOR_YELLOW, WEAK_GREEN);
+    init_pair(3, COLOR_YELLOW, COLOR_WHITE);
+    init_pair(4, COLOR_YELLOW, ILL_LEAF);
+    init_pair(5, COLOR_BLACK, HEALTHY_GREEN);
+    init_pair(6, COLOR_BLACK, WEAK_GREEN);
+    init_pair(7, COLOR_BLACK, COLOR_WHITE);
+    init_pair(8, COLOR_BLACK, ILL_LEAF);
+    init_pair(9, COLOR_RED, HEALTHY_GREEN);
+    init_pair(10, COLOR_RED, WEAK_GREEN);
+    init_pair(11, COLOR_RED, COLOR_WHITE);
+    init_pair(12, COLOR_RED, ILL_LEAF);
     attron(COLOR_PAIR(1));
 }
 
@@ -118,5 +128,5 @@ uint16_t Drawer::generateColor(const std::shared_ptr<Leaf>& leaf)
         color = 1;
     }
 
-    return color;
+    return color + 4;
 }

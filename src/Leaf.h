@@ -13,8 +13,10 @@ class Leaf
     uint8_t getSize();
     bool getTaken();
     bool getIll();
+    bool getEgg();
 
     void setTaken(bool taken);
+    void setEgg(bool egg);
 
     void regenerate();
     void eat();
@@ -22,6 +24,7 @@ class Leaf
     uint8_t size;
     bool taken;
     bool ill;
+    bool egg;
 };
 
 #endif

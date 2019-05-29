@@ -94,6 +94,16 @@ void Slug::live()
             movingLock.lock();
             auto oldCoords = moveRandomly();
             currentLeaf = leafField->updatePosition(oldCoords, leafCoords);
+            if (currentLeaf->getEgg() && rand() % 5 == 0)
+            {
+                colony->createNewSlug(leafCoords);
+                currentLeaf->setEgg(false);
+            }
+            else if (!currentLeaf->getEgg() && rand() % 5 == 0)
+            {
+                currentLeaf->setEgg(true);
+            }
+
             movingLock.unlock();
 
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -112,6 +122,7 @@ void Slug::live()
                     movingLock.lock();
                     auto oldCoords = moveRandomly();
                     currentLeaf = leafField->updatePosition(oldCoords, leafCoords);
+                    currentLeaf->setEgg(false);
                     movingLock.unlock();
                 }
                 else
