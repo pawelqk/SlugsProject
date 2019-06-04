@@ -15,41 +15,42 @@ uint8_t Leaf::getSize()
 
 bool Leaf::getTaken()
 {
-    return taken;
+    return taken.load();
 }
 
 bool Leaf::getIll()
 {
-    return ill;
+    return ill.load();
 }
 
 bool Leaf::getEgg()
 {
-    return egg;
+    return egg.load();
 }
 
 void Leaf::setTaken(bool taken)
 {
-    this->taken = taken;
+    this->taken.store(taken);
 }
 
 void Leaf::setEgg(bool egg)
 {
-    this->egg = egg;
+    this->egg.store(egg);
 }
 
 void Leaf::regenerate()
 {
     if (size++ == 0)
     {
-        if (rand() % 5 == 0)  // TODO: replace with real random engine
+        if (ill)
         {
-           ill = true;
+            ill.store(false);
         }
-        else if (ill)
+        else if (rand() % 5 == 0)  // TODO: replace with real random engine
         {
-            ill = false;
+            ill.store(true);
         }
+
     }
 }
 

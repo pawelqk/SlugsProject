@@ -1,6 +1,7 @@
 #ifndef __LEAF_H__
 #define __LEAF_H__
 
+#include <atomic>
 #include <cstdint>
 
 class Leaf
@@ -22,9 +23,9 @@ class Leaf
     void eat();
  private:
     uint8_t size;
-    bool taken;
-    bool ill;
-    bool egg;
+    std::atomic<bool> taken;
+    std::atomic<bool> ill;
+    std::atomic<bool> egg;
 };
 
 #endif
