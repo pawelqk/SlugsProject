@@ -18,9 +18,6 @@ class SlugColony;
 
 using Coordinates = std::pair<uint16_t, uint16_t>;
 
-static std::mutex movingLock;
-static std::mutex leafLock;
-
 class Slug
 {
  public:

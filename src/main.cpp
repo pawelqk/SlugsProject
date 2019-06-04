@@ -3,6 +3,7 @@
 #include "SlugColony.h"
 
 #include <curses.h>
+#include <mutex>
 #include <iostream>
 #include <string>
 
@@ -12,6 +13,8 @@ namespace
     constexpr uint16_t HEIGHT = 40;
     constexpr uint16_t COLONY_SIZE = 30;
 }
+
+std::mutex SlugColony::mutex;
 
 int main()
 {

@@ -6,7 +6,6 @@
 namespace
 {
     constexpr char FINISHER = ' ';
-    size_t slugsBorn = 0;
 }
 
 ConcurrencyDispatcher::ConcurrencyDispatcher(
@@ -43,7 +42,6 @@ void ConcurrencyDispatcher::waitForKey()
     {
         callback();
     }
-    std::cout << "Total amount of slugs born: " << slugsBorn << std::endl;
 }
 
 void ConcurrencyDispatcher::createNew(const std::function<std::thread()> spawner,
@@ -52,5 +50,4 @@ void ConcurrencyDispatcher::createNew(const std::function<std::thread()> spawner
     onFinishCallbacks.push_back(killer);
     auto thread = spawner();
     thread.detach();
-    ++slugsBorn;
 }

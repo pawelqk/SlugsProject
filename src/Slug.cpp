@@ -95,7 +95,7 @@ void Slug::live()
         }
         else
         {
-            movingLock.lock();
+            SlugColony::mutex.lock();
             auto oldCoords = moveRandomly();
             currentLeaf = leafField->updatePosition(oldCoords, leafCoords);
             if (currentLeaf->getEgg() && (rand() % 5 == 0))
@@ -112,8 +112,8 @@ void Slug::live()
                 currentLeaf->setEgg(true);
             }
 
-            movingLock.unlock();
-
+            
+            SlugColony::mutex.unlock();
             std::this_thread::sleep_for(std::chrono::milliseconds(500));
         }
         if (ill)
@@ -127,17 +127,17 @@ void Slug::live()
                 Move moveToNeighbour = tryToMoveToReachSlug();
                 if (moveToNeighbour == NONE)
                 {
-                    movingLock.lock();
+                    SlugColony::mutex.lock();
                     auto oldCoords = moveRandomly();
                     currentLeaf = leafField->updatePosition(oldCoords, leafCoords);
                     currentLeaf->setEgg(false);
-                    movingLock.unlock();
+                    SlugColony::mutex.unlock();
                 }
                 else
                 {
-                    movingLock.lock();
+                    SlugColony::mutex.lock();
                     eatSlug(moveToNeighbour);
-                    movingLock.unlock();
+                    SlugColony::mutex.unlock();
                 }
                 std::this_thread::sleep_for(std::chrono::milliseconds(200));
             }

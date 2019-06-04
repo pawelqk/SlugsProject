@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <vector>
 #include <thread>
 
@@ -31,7 +32,8 @@ class SlugColony
 
     void killSlug(const Coordinates& slugCoords);
     void createNewSlug(const Slug& slug);
-
+    
+    static std::mutex mutex;   
  private:
     uint16_t size;
     std::map<Coordinates, Slug> colony;

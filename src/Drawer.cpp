@@ -56,6 +56,7 @@ void Drawer::refreshScreen()
         {
             for (auto j = 0u; j < height; j++)
             {
+                SlugColony::mutex.lock();
                 move(j, i);
                 uint8_t color = generateColor(leaves[i][j]);
 
@@ -80,7 +81,8 @@ void Drawer::refreshScreen()
                 {
                     printw(" ");
                 }
-
+                
+                SlugColony::mutex.unlock();
                 attroff(COLOR_PAIR(color));
                 attron(COLOR_PAIR(1));
             }
